@@ -33,9 +33,6 @@ class AppExtension extends AbstractExtension
         if(strpos($url, '.gif') !== false) {
             return true;
         }
-        if(strpos($url, '.svg') !== false) {
-            return true;
-        }
 
         return false;
     }
