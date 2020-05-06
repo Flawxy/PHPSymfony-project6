@@ -31,7 +31,7 @@ class User
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $profilePicture;
+    private ?string $profilePicture;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="creator")

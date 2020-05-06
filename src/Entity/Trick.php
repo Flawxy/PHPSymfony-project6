@@ -63,7 +63,7 @@ class Trick
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private \DateTime $modificationDate;
+    private ?\DateTime $modificationDate;
 
     public function __construct()
     {
@@ -84,7 +84,7 @@ class Trick
     }
 
     /**
-     * Initialises the creation date of a trick
+     * Initializes the creation date of a trick
      *
      * @ORM\PrePersist()
      */
