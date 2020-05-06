@@ -5,6 +5,7 @@
 {% block body %}
 <div class="container">
     <h1>{{ trick.category.name | capitalize }} : {{ trick.name }}</h1>
+    <p>{{ trick.description | capitalize }}</p>
     {% for media in trick.medias %}
         {% if 'youtube' in media.url %}
         <iframe width="560" height="315"
