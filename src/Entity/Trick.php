@@ -55,11 +55,6 @@ class Trick
      */
     private Collection $comments;
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
     /**
      * @ORM\Column(type="datetime")
      */
@@ -68,14 +63,8 @@ class Trick
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-<<<<<<< Updated upstream
-    private \DateTime $modificationDate;
-
-=======
     private ?\DateTime $modificationDate;
 
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     public function __construct()
     {
         $this->medias = new ArrayCollection();
@@ -94,15 +83,8 @@ class Trick
         $this->slug = $slugify->slugify($this->name);
     }
 
-<<<<<<< Updated upstream
-    /**
-     * Initialises the creation date of a trick
-=======
-<<<<<<< Updated upstream
-=======
     /**
      * Initializes the creation date of a trick
->>>>>>> Stashed changes
      *
      * @ORM\PrePersist()
      */
@@ -121,10 +103,6 @@ class Trick
         $this->modificationDate = new \DateTime();
     }
 
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     public function getId(): ?int
     {
         return $this->id;
