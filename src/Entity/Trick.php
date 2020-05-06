@@ -53,12 +53,57 @@ class Trick
      */
     private Collection $comments;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private \DateTime $creationDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private \DateTime $modificationDate;
+
     public function __construct()
     {
         $this->medias = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * Initializes the slug with the Slugify library (cocur/slugify)
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function initializeSlug()
+    {
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($this->name);
+    }
+
+    /**
+     * Initialises the creation date of a trick
+     *
+     * @ORM\PrePersist()
+     */
+    public function initializeDate()
+    {
+        $this->creationDate = new \DateTime();
+    }
+
+    /**
+     * Adjusts the date of a trick if its updated
+     *
+     * @ORM\PreUpdate()
+     */
+    public function updateDate()
+    {
+        $this->modificationDate = new \DateTime();
+    }
+
+>>>>>>> Stashed changes
     public function getId(): ?int
     {
         return $this->id;
@@ -182,6 +227,30 @@ class Trick
                 $comment->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getModificationDate(): ?\DateTimeInterface
+    {
+        return $this->modificationDate;
+    }
+
+    public function setModificationDate(?\DateTimeInterface $modificationDate): self
+    {
+        $this->modificationDate = $modificationDate;
 
         return $this;
     }
