@@ -21,16 +21,16 @@ class AppExtension extends AbstractExtension
      */
     public function isMediaAnImage(string $url) : bool
     {
-        if(strpos($url, 'jpg') !== false) {
+        if(strpos($url, '.jpg') !== false) {
             return true;
         }
-        if(strpos($url, 'jpeg') !== false) {
+        if(strpos($url, '.jpeg') !== false) {
             return true;
         }
-        if(strpos($url, 'png') !== false) {
+        if(strpos($url, '.png') !== false) {
             return true;
         }
-        if(strpos($url, 'gif') !== false) {
+        if(strpos($url, '.gif') !== false) {
             return true;
         }
 
