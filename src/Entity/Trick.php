@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Trick
 {
@@ -57,6 +59,18 @@ class Trick
     {
         $this->medias = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * Initializes the slug with the Slugify library (cocur/slugify)
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function initializeSlug()
+    {
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($this->name);
     }
 
     public function getId(): ?int
