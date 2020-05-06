@@ -43,6 +43,11 @@ class User
      */
     private Collection $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $mail;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -148,6 +153,18 @@ class User
                 $comment->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMail(): ?string
+    {
+        return $this->mail;
+    }
+
+    public function setMail(string $mail): self
+    {
+        $this->mail = $mail;
 
         return $this;
     }
