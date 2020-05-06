@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends AbstractController
 {
     /**
+     * Displays all the tricks
+     *
      * @Route("/tricks", name="tricks_index")
      * @param TrickRepository $repo
      * @return Response
