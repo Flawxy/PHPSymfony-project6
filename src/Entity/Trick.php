@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Trick
 {
@@ -69,8 +71,6 @@ class Trick
         $this->comments = new ArrayCollection();
     }
 
-<<<<<<< Updated upstream
-=======
     /**
      * Initializes the slug with the Slugify library (cocur/slugify)
      *
@@ -103,7 +103,6 @@ class Trick
         $this->modificationDate = new \DateTime();
     }
 
->>>>>>> Stashed changes
     public function getId(): ?int
     {
         return $this->id;

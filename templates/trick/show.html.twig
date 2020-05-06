@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trick.name | capitalize }}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>{{ trick.category.name | capitalize }} : {{ trick.name }}</h1>
+    <p>{{ trick.description | capitalize }}</p>
+    {% for media in trick.medias %}
+        {% if isMediaAnImage(media.url) %}
+            <img src="{{ media.url }}" alt="..." />
+        {% else %}
+        {{ media.url | raw }}
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
+
+
+
