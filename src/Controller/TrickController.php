@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,14 +26,13 @@ class TrickController extends AbstractController
      * Displays one particular trick
      *
      * @Route("/tricks/{slug}", name="tricks_show")
-     * @param $slug
-     * @param TrickRepository $repo
+     * @param Trick $trick
      * @return Response
      */
-    public function show($slug, TrickRepository $repo)
+    public function show(Trick $trick)
     {
         return $this->render('trick/show.html.twig', [
-            'trick' => $repo->findOneBySlug($slug)
+            'trick' => $trick
         ]);
     }
 }
