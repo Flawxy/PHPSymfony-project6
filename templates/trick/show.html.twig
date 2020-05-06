@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trick.name | capitalize }}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>{{ trick.category.name | capitalize }} : {{ trick.name }}</h1>
+    {% for media in trick.medias %}
+        {% if 'youtube' in media.url %}
+        <iframe width="560" height="315"
+                src="{{ media.url }}"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+        </iframe>
+        {% else %}
+        <img src="{{ media.url }}" alt="..." />
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
+
+
+
