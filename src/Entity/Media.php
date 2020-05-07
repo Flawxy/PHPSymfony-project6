@@ -19,12 +19,12 @@ class Media
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $url;
+    private ?string $url = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $caption;
+    private ?string $caption = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="medias")
