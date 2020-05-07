@@ -4,7 +4,8 @@
 
 {% block body %}
 <div class="container">
-    <h1>{{ trick.category.name | capitalize }} : {{ trick.name }}</h1>
+    <h1>{{ trick.name }} <span class="badge badge-pill badge-success">{{ trick.category.name | capitalize }}</span></h1>
+    <img src="{{ trick.coverImage }}" alt="...">
     <p>{{ trick.description | capitalize }}</p>
     {% for media in trick.medias %}
         {% if isMediaAnImage(media.url) %}
