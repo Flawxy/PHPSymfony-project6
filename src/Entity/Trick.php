@@ -6,10 +6,14 @@ use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("name",
+ *     message="Une figure portant ce nom existe déjà !")
  */
 class Trick
 {
@@ -23,7 +27,7 @@ class Trick
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $name;
+    private ?string $name = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -33,7 +37,7 @@ class Trick
     /**
      * @ORM\Column(type="text")
      */
-    private string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", orphanRemoval=true)
@@ -43,7 +47,7 @@ class Trick
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks")
      */
-    private Category $category;
+    private ?Category $category = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
@@ -64,6 +68,14 @@ class Trick
      * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTime $modificationDate;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Url(
+     *     message="Vous devez fournir une URL valide."
+     * )
+     */
+    private ?string $coverImage = null;
 
     public function __construct()
     {
@@ -250,6 +262,18 @@ class Trick
     public function setModificationDate(?\DateTimeInterface $modificationDate): self
     {
         $this->modificationDate = $modificationDate;
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(string $coverImage): self
+    {
+        $this->coverImage = $coverImage;
 
         return $this;
     }
