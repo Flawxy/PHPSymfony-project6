@@ -5,11 +5,30 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< Updated upstream
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
+=======
+<<<<<<< Updated upstream
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+=======
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("nickname",
+ *     message="Un compte porte déjà ce pseudonyme !"
+ * )
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
  */
 class User implements UserInterface
 {
@@ -22,13 +41,36 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     message="Vous devez choisir un pseudonyme."
+     * )
      */
-    private string $nickname;
+    private ?string $nickname = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(
+     *     message="Veuillez renseigner un email valide."
+     * )
      */
-    private string $password;
+    private ?string $mail = null;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *     min=6,
+     *     minMessage="Votre mot de passe doit comporter au moins 6 caractères."
+     * )
+     */
+    private ?string $password = null;
+
+    /**
+     * @Assert\EqualTo(
+     *     propertyPath="password",
+     *     message="Les mots de passe indiqués ne correspondent pas."
+     * )
+     */
+    public ?string $passwordConfirmation = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -45,23 +87,27 @@ class User implements UserInterface
      */
     private Collection $comments;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $mail;
-
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
     /**
      * Assigns an image to an user when he registers
      *
      * @ORM\PrePersist()
      */
+<<<<<<< Updated upstream
     protected function initializeProfilePicture()
+=======
+    public function initializeProfilePicture()
+>>>>>>> Stashed changes
     {
         $picture = 'https://randomuser.me/api/portraits/lego/';
 
@@ -73,6 +119,10 @@ class User implements UserInterface
 
     }
 
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     public function getId(): ?int
     {
         return $this->id;
