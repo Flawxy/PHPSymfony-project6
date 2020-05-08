@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends AbstractController
 {
     /**
-     * Creates a trick
+     * Displays the creating form for a trick
      *
      * @Route("tricks/new", name="tricks_create")
      * @param Request $request
@@ -44,9 +44,7 @@ class TrickController extends AbstractController
                 "La figure <strong>{$trick->getName()}</strong> a bien été enregistrée !"
             );
 
-            return $this->redirectToRoute('tricks_show', [
-                'slug' => $trick->getSlug()
-            ]);
+            return $this->redirectToRoute('tricks_index');
         }
 
         return $this->render('trick/new.html.twig', [
@@ -79,6 +77,45 @@ class TrickController extends AbstractController
     public function show(Trick $trick)
     {
         return $this->render('trick/show.html.twig', [
+            'trick' => $trick
+        ]);
+    }
+
+    /**
+     * Displays the editing form of a trick
+     *
+     * @Route("/tricks/{slug}/edit", name="tricks_edit")
+     * @param Request $request
+     * @param Trick $trick
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager)
+    {
+        $form = $this->createForm(TrickType::class, $trick);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            foreach ($trick->getMedias() as $media) {
+                $media->setTrick($trick);
+                $manager->persist($media);
+            }
+            $manager->persist($trick);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                "Les modifications de la figure <strong>{$trick->getName()}</strong> ont bien été enregistrées !"
+            );
+
+            return $this->redirectToRoute('tricks_show', [
+                'slug' => $trick->getSlug()
+            ]);
+        }
+
+        return $this->render('trick/edit.html.twig', [
+            'form' => $form->createView(),
             'trick' => $trick
         ]);
     }
