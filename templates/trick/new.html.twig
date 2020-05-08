@@ -2,7 +2,7 @@
 
 {% block title %}Création d'une figure{% endblock %}
 
-{% form_theme form _self %}
+{% form_theme form 'trick/_collection.html.twig' %}
 
 {% block body %}
 <div class="container">
@@ -18,65 +18,7 @@
     {{ form_end(form) }}
 </div>
 {% endblock %}
-{% block _trick_medias_widget %}
-    <p>Ici vous pouvez ajouter encore plus de médias !</p>
-
-    {{ form_widget(form) }}
-
-    <input type="hidden" id="widgets-counter" value="0">
-
-    <div class="form-group">
-        <button type="button" id="add-media" class="btn btn-primary">
-            Ajouter un media
-        </button>
-    </div>
-{% endblock %}
-
-{% block _trick_medias_entry_row %}
-    {{ form_widget(form) }}
-{% endblock %}
-
-{% block _trick_medias_entry_widget %}
-    <div class="form-group" id="block_{{ id }}">
-        <div class="row">
-            <div class="col-10">
-                <div class="row">
-                    <div class="col">
-                        {{ form_widget(form.url) }}
-                    </div>
-                    <div class="col">
-                        {{ form_widget(form.caption) }}
-                    </div>
-                </div>
-            </div>
-            <div class="col-2">
-                <button type="button" data-action="delete" data-target="#block_{{ id }}" class="btn btn-danger">X</button>
-            </div>
-        </div>
-    </div>
-{% endblock %}
 
 {% block javascripts %}
-    <script>
-        $('#add-media').click(() => {
-            const index = +$('#widgets-counter').val();
-            const template = $('#trick_medias').data('prototype').replace(/__name__/g, index);
-
-            $('#trick_medias').append(template);
-
-            $('#widgets-counter').val(index + 1);
-
-           handleDeleteButtons();
-        });
-
-        function handleDeleteButtons() {
-            $('button[data-action="delete"]').click(function() {
-                const target = this.dataset.target;
-
-                $(target).remove();
-            });
-        }
-
-        handleDeleteButtons();
-    </script>
+    <script src="{{ asset('js/trick.js') }}"></script>
 {% endblock %}
