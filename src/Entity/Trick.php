@@ -91,7 +91,7 @@ class Trick
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    protected function initializeSlug()
+    public function initializeSlug()
     {
         $slugify = new Slugify();
         $this->slug = $slugify->slugify($this->name);
@@ -102,7 +102,7 @@ class Trick
      *
      * @ORM\PrePersist()
      */
-    protected function initializeDate()
+    public function initializeDate()
     {
         $this->creationDate = new \DateTime();
     }
@@ -112,7 +112,7 @@ class Trick
      *
      * @ORM\PreUpdate()
      */
-    protected function updateDate()
+    public function updateDate()
     {
         $this->modificationDate = new \DateTime();
     }
