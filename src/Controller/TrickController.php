@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,6 +90,7 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @param EntityManagerInterface $manager
      * @return Response
+     * @throws Exception
      */
     public function edit(Request $request, Trick $trick, EntityManagerInterface $manager)
     {
@@ -101,6 +103,7 @@ class TrickController extends AbstractController
                 $media->setTrick($trick);
                 $manager->persist($media);
             }
+            $trick->updateDate();
             $manager->persist($trick);
             $manager->flush();
 
