@@ -41,6 +41,7 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", orphanRemoval=true)
+     * @Assert\Valid()
      */
     private Collection $medias;
 
