@@ -4,17 +4,17 @@
 
 {% block body %}
 <div class="container">
-    <h1>{{ trick.category.name | capitalize }} : {{ trick.name }}</h1>
+    <p><a href="{{ path('tricks_edit', {'slug' : trick.slug}) }}">Modifier la figure</a></p>
+    <h1>{{ trick.name | capitalize }} <span class="badge badge-pill badge-success">{{ trick.category.name | capitalize }}</span></h1>
+    <img src="{{ trick.coverImage }}" alt="...">
     <p>{{ trick.description | capitalize }}</p>
     {% for media in trick.medias %}
-        {% if 'youtube' in media.url %}
-        <iframe width="560" height="315"
-                src="{{ media.url }}"
-                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-        </iframe>
+        {% if isMediaAnImage(media.url) %}
+            <img src="{{ media.url }}" alt="..." />
+            <figcaption>{{ media.caption }}</figcaption>
         {% else %}
-        <img src="{{ media.url }}" alt="..." />
+        {{ media.url | raw }}
+        <figcaption>{{ media.caption }}</figcaption>
         {% endif %}
     {% endfor %}
 </div>

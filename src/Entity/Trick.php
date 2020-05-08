@@ -6,10 +6,27 @@ use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\HasLifecycleCallbacks()
+<<<<<<< Updated upstream
+ * @UniqueEntity("name",
+ *     message="Une figure portant ce nom existe déjà !")
+=======
+<<<<<<< Updated upstream
+=======
+ * @UniqueEntity("name",
+<<<<<<< Updated upstream
+ *     message="Une figure portant ce nom existe déjà !")
+=======
+ *     message="Une figure portant ce nom existe déjà !"
+ * )
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
  */
 class Trick
 {
@@ -23,7 +40,7 @@ class Trick
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private string $name;
+    private ?string $name = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -33,17 +50,18 @@ class Trick
     /**
      * @ORM\Column(type="text")
      */
-    private string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", orphanRemoval=true)
+     * @Assert\Valid()
      */
     private Collection $medias;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks")
      */
-    private Category $category;
+    private ?Category $category = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
@@ -54,6 +72,24 @@ class Trick
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
      */
     private Collection $comments;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private \DateTime $creationDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?\DateTime $modificationDate;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Url(
+     *     message="Vous devez fournir une URL valide."
+     * )
+     */
+    private ?string $coverImage = null;
 
     public function __construct()
     {
@@ -67,10 +103,30 @@ class Trick
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function initializeSlug()
+    protected function initializeSlug()
     {
         $slugify = new Slugify();
         $this->slug = $slugify->slugify($this->name);
+    }
+
+    /**
+     * Initializes the creation date of a trick
+     *
+     * @ORM\PrePersist()
+     */
+    protected function initializeDate()
+    {
+        $this->creationDate = new \DateTime();
+    }
+
+    /**
+     * Adjusts the date of a trick if its updated
+     *
+     * @ORM\PreUpdate()
+     */
+    protected function updateDate()
+    {
+        $this->modificationDate = new \DateTime();
     }
 
     public function getId(): ?int
@@ -196,6 +252,42 @@ class Trick
                 $comment->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getModificationDate(): ?\DateTimeInterface
+    {
+        return $this->modificationDate;
+    }
+
+    public function setModificationDate(?\DateTimeInterface $modificationDate): self
+    {
+        $this->modificationDate = $modificationDate;
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(string $coverImage): self
+    {
+        $this->coverImage = $coverImage;
 
         return $this;
     }
