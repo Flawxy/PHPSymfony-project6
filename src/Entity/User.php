@@ -5,18 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-<<<<<<< Updated upstream
-use Symfony\Component\Security\Core\User\UserInterface;
-
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\HasLifecycleCallbacks()
-=======
-<<<<<<< Updated upstream
-
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
-=======
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,8 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("nickname",
  *     message="Un compte porte déjà ce pseudonyme !"
  * )
->>>>>>> Stashed changes
->>>>>>> Stashed changes
  */
 class User implements UserInterface
 {
@@ -93,21 +79,12 @@ class User implements UserInterface
         $this->comments = new ArrayCollection();
     }
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
     /**
      * Assigns an image to an user when he registers
      *
      * @ORM\PrePersist()
      */
-<<<<<<< Updated upstream
-    protected function initializeProfilePicture()
-=======
     public function initializeProfilePicture()
->>>>>>> Stashed changes
     {
         $picture = 'https://randomuser.me/api/portraits/lego/';
 
@@ -119,10 +96,6 @@ class User implements UserInterface
 
     }
 
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     public function getId(): ?int
     {
         return $this->id;
