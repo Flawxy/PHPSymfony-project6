@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+<<<<<<< Updated upstream
 class TrickType extends AbstractType
 {
     /**
@@ -32,6 +33,10 @@ class TrickType extends AbstractType
         ], $options);
     }
 
+=======
+class TrickType extends ApplicationType
+{
+>>>>>>> Stashed changes
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
