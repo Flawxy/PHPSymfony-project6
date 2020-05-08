@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
@@ -23,6 +24,10 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *     min=10,
+     *     minMessage="La légende du média doit faire au moins 10 caractères"
+     * )
      */
     private ?string $caption = null;
 
