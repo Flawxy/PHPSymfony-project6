@@ -12,21 +12,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\HasLifecycleCallbacks()
-<<<<<<< Updated upstream
  * @UniqueEntity("name",
- *     message="Une figure portant ce nom existe déjà !")
-=======
-<<<<<<< Updated upstream
-=======
- * @UniqueEntity("name",
-<<<<<<< Updated upstream
- *     message="Une figure portant ce nom existe déjà !")
-=======
  *     message="Une figure portant ce nom existe déjà !"
  * )
->>>>>>> Stashed changes
->>>>>>> Stashed changes
->>>>>>> Stashed changes
  */
 class Trick
 {
