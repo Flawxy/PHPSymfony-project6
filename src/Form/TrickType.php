@@ -12,31 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-<<<<<<< Updated upstream
-class TrickType extends AbstractType
-{
-    /**
-     * Allows to configure a form's field
-     *
-     * @param string $label
-     * @param string $placeholder
-     * @param array $options
-     * @return array
-     */
-    private function getConfiguration(string $label, string $placeholder, $options = [])
-    {
-        return array_merge([
-            'label' => $label,
-            'attr' => [
-                'placeholder' => $placeholder
-            ]
-        ], $options);
-    }
-
-=======
 class TrickType extends ApplicationType
 {
->>>>>>> Stashed changes
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
