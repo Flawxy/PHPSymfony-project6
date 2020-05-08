@@ -5,11 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -52,6 +54,23 @@ class User
     {
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * Assigns an image to an user when he registers
+     *
+     * @ORM\PrePersist()
+     */
+    protected function initializeProfilePicture()
+    {
+        $picture = 'https://randomuser.me/api/portraits/lego/';
+
+        $number = rand(0, 8);
+
+        $picture .= $number . '.jpg';
+
+        $this->profilePicture = $picture;
+
     }
 
     public function getId(): ?int
@@ -168,4 +187,30 @@ class User
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt(){}
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername()
+    {
+        return $this->getNickname();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials(){}
 }
