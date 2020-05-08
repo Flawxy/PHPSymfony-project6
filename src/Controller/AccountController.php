@@ -2,13 +2,6 @@
 
 namespace App\Controller;
 
-<<<<<<< Updated upstream
-use App\Entity\User;
-use App\Form\RegistrationType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-=======
 use App\Entity\PasswordUpdate;
 use App\Entity\User;
 use App\Form\PasswordUpdateType;
@@ -20,17 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
->>>>>>> Stashed changes
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AccountController extends AbstractController
 {
     /**
      * Displays the register form
-<<<<<<< Updated upstream
-     */
-    public function register()
-=======
      *
      * @Route("/register", name="account_register")
      * @param Request $request
@@ -39,13 +27,10 @@ class AccountController extends AbstractController
      * @return Response
      */
     public function register(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
->>>>>>> Stashed changes
     {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
 
-<<<<<<< Updated upstream
-=======
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -63,7 +48,6 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('account_login');
         }
 
->>>>>>> Stashed changes
         return $this->render('account/registration.html.twig', [
             'form' => $form->createView()
         ]);
@@ -97,8 +81,6 @@ class AccountController extends AbstractController
     {
         // Managed by Symfony
     }
-<<<<<<< Updated upstream
-=======
 
     /**
      * Allows the user to change his password
@@ -144,5 +126,4 @@ class AccountController extends AbstractController
             'form' => $form->createView()
         ]);
     }
->>>>>>> Stashed changes
 }
