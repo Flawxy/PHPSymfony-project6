@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Media;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +20,7 @@ class TrickController extends AbstractController
      * Displays the creating form for a trick
      *
      * @Route("tricks/new", name="tricks_create")
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return Response
@@ -36,6 +38,8 @@ class TrickController extends AbstractController
                 $media->setTrick($trick);
                 $manager->persist($media);
             }
+
+            $trick->setCreator($this->getUser());
 
             $manager->persist($trick);
             $manager->flush();
@@ -86,6 +90,7 @@ class TrickController extends AbstractController
      * Displays the editing form of a trick
      *
      * @Route("/tricks/{slug}/edit", name="tricks_edit")
+     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param Trick $trick
      * @param EntityManagerInterface $manager
@@ -121,5 +126,26 @@ class TrickController extends AbstractController
             'form' => $form->createView(),
             'trick' => $trick
         ]);
+    }
+
+    /**
+     * Allows to delete a trick
+     * @Route("/tricks/{slug}/delete", name="tricks_delete")
+     * @IsGranted("ROLE_USER")
+     * @param Trick $trick
+     * @param EntityManagerInterface $manager
+     * @return RedirectResponse
+     */
+    public function delete(Trick $trick, EntityManagerInterface $manager)
+    {
+        $manager->remove($trick);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "L'annonce <strong>{$trick->getName()}</strong> a bien été supprimée !"
+        );
+
+        return $this->redirectToRoute('tricks_index');
     }
 }
