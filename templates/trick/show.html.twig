@@ -52,7 +52,6 @@
                 Poster votre commentaire
             </button>
             <div class="text-muted">(connecté(e) en tant que <strong>{{ app.user.nickname }}</strong>)</div>
-
             {{ form_end(form) }}
         {% else %}
         Pour écrire un commentaire, il faut vous <a href="{{ path('account_login') }}">identifier</a> ou vous
@@ -68,7 +67,7 @@
                 <div class="card-body">
                     <h4 class="card-title">
                         {% if comment.author %}
-                            <img src="{{ comment.author.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ comment.author.nickname }}">
+                            <img src="{{ comment.author.profilePicture }}" class="avatar avatar-medium" alt="Avatar de {{ comment.author.nickname }}">
                             {{ comment.author.nickname }}
                         {% else %}
                             Pseudo supprimé
