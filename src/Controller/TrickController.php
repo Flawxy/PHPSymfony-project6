@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -77,12 +79,38 @@ class TrickController extends AbstractController
      *
      * @Route("/tricks/{slug}", name="tricks_show")
      * @param Trick $trick
+     * @param Request $request
+     * @param EntityManagerInterface $manager
      * @return Response
      */
-    public function show(Trick $trick)
+    public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
     {
+        $comment = new Comment();
+
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setAuthor($this->getUser());
+            $comment->setTrick($trick);
+
+            $manager->persist($comment);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                "Votre commentaire a bien été publié !"
+            );
+
+            return $this->redirectToRoute('tricks_show', [
+                'slug' => $trick->getSlug()
+            ]);
+        }
+
         return $this->render('trick/show.html.twig', [
-            'trick' => $trick
+            'trick' => $trick,
+            'form' => $form->createView()
         ]);
     }
 
@@ -129,7 +157,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * Allows to delete a trick
+     * Allows an user to delete a trick
      * @Route("/tricks/{slug}/delete", name="tricks_delete")
      * @IsGranted("ROLE_USER")
      * @param Trick $trick
