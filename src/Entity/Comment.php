@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Comment
 {
@@ -23,8 +25,15 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(
+     *     message="Vous devez écrire un commentaire !"
+     * )
+     * @Assert\Length(
+     *     min="20",
+     *     minMessage="Votre commentaire doit faire au moins 20 caractères !"
+     * )
      */
-    private string $content;
+    private ?string $content = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
@@ -36,6 +45,16 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private Trick $trick;
+
+    /**
+     * Initializes the post date of a comment
+     *
+     * @ORM\PrePersist()
+     */
+    public function initializeDate()
+    {
+        $this->date = new \DateTime();
+    }
 
     public function getId(): ?int
     {

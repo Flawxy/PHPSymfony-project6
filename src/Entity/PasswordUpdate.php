@@ -6,9 +6,6 @@ use App\Repository\PasswordUpdateRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=PasswordUpdateRepository::class)
- */
 class PasswordUpdate
 {
     private ?string $oldPassword = null;
