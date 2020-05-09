@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accès non autorisé (erreur 403){% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Alors ? On essaye de contourner le tracé ?</h1>
+        <div class="alert alert-danger">
+            <p>Vous n'avez pas le droit d'accéder à cette resource !</p>
+        </div>
+        <a href="{{ path('homepage') }}" class="btn btn-primary">
+            Retour à l'accueil
+        </a>
+    </div>
+{% endblock %}

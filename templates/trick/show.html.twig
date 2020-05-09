@@ -43,6 +43,44 @@
         {% endif %}
     {% endfor %}
     </div>
+
+    <div class="mt-3">
+        {% if app.user %}
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-primary">
+                Poster votre commentaire
+            </button>
+        {{ form_end(form) }}
+        {% else %}
+        Pour écrire un commentaire, il faut vous <a href="{{ path('account_login') }}">identifier</a> ou vous
+        <a href="{{ path('account_register') }}">inscrire</a> si vous ne possédez pas encore de compte !
+        {% endif %}
+    </div>
+
+    <div class="mt-3">
+    {% if trick.comments | length > 0 %}
+        {% for comment in trick.comments %}
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Posté le {{ comment.date | date('d/m/Y à H:i:s') }}</div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        {% if comment.author %}
+                            <img src="{{ comment.author.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ comment.author.nickname }}">
+                            {{ comment.author.nickname }}
+                        {% else %}
+                            Pseudo supprimé
+                        {% endif %}
+                    </h4>
+                    <p class="card-text">{{ comment.content }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        Il n'y a actuellement aucun commentaire sur cette figure.
+    {% endif %}
+    </div>
 </div>
 {% endblock %}
 
