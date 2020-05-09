@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page non trouvée (erreur 404){% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Oups ! Vous vous êtes égaré dans la montagne !</h1>
+    <p>Même si faire du hors-piste est parfois grisant, nous vous conseillons de revenir dans un endroit plus sécurisé.<br />
+    Sur notre site par exemple !</p>
+    <a href="{{ path('homepage') }}" class="btn btn-primary">
+        Retour à l'accueil
+    </a>
+</div>
+{% endblock %}
