@@ -14,7 +14,7 @@ class CommentType extends ApplicationType
     {
         $builder
             ->add('content', TextareaType::class,
-                $this->getConfiguration("Votre commentaire", "Écrivez un commentaire au sujet de cette figure..."))
+                $this->getConfiguration(false, "Écrivez un commentaire au sujet de cette figure..."))
         ;
     }
 
