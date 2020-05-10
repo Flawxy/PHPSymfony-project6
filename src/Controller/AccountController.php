@@ -6,12 +6,15 @@ use App\Entity\PasswordUpdate;
 use App\Entity\User;
 use App\Form\PasswordUpdateType;
 use App\Form\RegistrationType;
+use App\Service\MailManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -25,9 +28,11 @@ class AccountController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param UserPasswordEncoderInterface $encoder
+     * @param MailManagerService $mailManagerService
+     * @param MailerInterface $mailer
      * @return Response
      */
-    public function register(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    public function register(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder, MailManagerService $mailManagerService, MailerInterface $mailer)
     {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -41,9 +46,11 @@ class AccountController extends AbstractController
             $manager->persist($user);
             $manager->flush();
 
+            $mailManagerService->sendValidationMail($user, $mailer);
+
             $this->addFlash(
                 'success',
-                "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !"
+                "Un mail de confirmation a été envoyé à <strong>{$user->getMail()}</strong> afin de valider votre inscription !"
             );
 
             return $this->redirectToRoute('account_login');
@@ -127,5 +134,36 @@ class AccountController extends AbstractController
         return $this->render('account/password.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/account/validation/{confirmationToken}", name="account_validation")
+     * @param User $user
+     * @param EntityManagerInterface $manager
+     * @return RedirectResponse
+     */
+    public function validateMail(User $user, EntityManagerInterface $manager)
+    {
+        if (!$user) {
+            $this->addFlash(
+                'warning',
+                "Ce lien ne semble pas valide..."
+            );
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        $user->setConfirmationToken(null);
+
+        $manager->persist($user);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "Votre adresse mail <strong>{$user->getMail()}</strong> a été validée ! Vous pouvez maintenant vous connecter !"
+        );
+
+        return $this->redirectToRoute('account_login');
+
     }
 }

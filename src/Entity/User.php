@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,6 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("nickname",
  *     message="Un compte porte déjà ce pseudonyme !"
+ * )
+ * @UniqueEntity("mail",
+ *     message="Un compte associé à cette adresse mail existe déjà !"
  * )
  */
 class User implements UserInterface
@@ -73,10 +77,30 @@ class User implements UserInterface
      */
     private Collection $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $confirmationToken = null;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * Assigns a token to an user when he registers
+     *
+     * @ORM\PrePersist()
+     * @throws Exception
+     */
+    public function initializeToken()
+    {
+        $randomString = random_bytes(10);
+
+        $token = md5($randomString);
+
+        $this->confirmationToken = $token;
     }
 
     /**
@@ -236,4 +260,16 @@ class User implements UserInterface
      * @inheritDoc
      */
     public function eraseCredentials(){}
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
 }
