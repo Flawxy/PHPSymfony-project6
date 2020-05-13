@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,28 +64,22 @@ class Trick
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTimeInterface $creationDate;
+    private \DateTime $creationDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?DateTimeInterface $modificationDate;
+    private ?\DateTime $modificationDate;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private ?string $coverImage = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true)
-     */
-    private Collection $images;
-
     public function __construct()
     {
         $this->medias = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->images = new ArrayCollection();
     }
 
     /**
@@ -109,7 +101,7 @@ class Trick
      */
     public function initializeDate()
     {
-        $this->creationDate = new DateTime();
+        $this->creationDate = new \DateTime();
     }
 
     /**
@@ -119,7 +111,7 @@ class Trick
      */
     public function updateDate()
     {
-        $this->modificationDate = new DateTime();
+        $this->modificationDate = new \DateTime();
     }
 
     public function getId(): ?int
@@ -249,24 +241,24 @@ class Trick
         return $this;
     }
 
-    public function getCreationDate(): ?DateTimeInterface
+    public function getCreationDate(): ?\DateTimeInterface
     {
         return $this->creationDate;
     }
 
-    public function setCreationDate(DateTimeInterface $creationDate): self
+    public function setCreationDate(\DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
 
         return $this;
     }
 
-    public function getModificationDate(): ?DateTimeInterface
+    public function getModificationDate(): ?\DateTimeInterface
     {
         return $this->modificationDate;
     }
 
-    public function setModificationDate(?DateTimeInterface $modificationDate): self
+    public function setModificationDate(?\DateTimeInterface $modificationDate): self
     {
         $this->modificationDate = $modificationDate;
 
@@ -281,37 +273,6 @@ class Trick
     public function setCoverImage(string $coverImage): self
     {
         $this->coverImage = $coverImage;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Image[]
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(Image $image): self
-    {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-            $image->setTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            // set the owning side to null (unless already changed)
-            if ($image->getTrick() === $this) {
-                $image->setTrick(null);
-            }
-        }
 
         return $this;
     }

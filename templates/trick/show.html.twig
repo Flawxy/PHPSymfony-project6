@@ -33,14 +33,14 @@
     {% endif %}
 
     <div>
-    {% for image in trick.images %}
-        <img src="{{ asset('uploads/images/' ~ image) }}" alt="...">
-    {% endfor %}
-    </div>
-
-    <div>
     {% for media in trick.medias %}
+        {% if isMediaAnImage(media.url) %}
+            <img src="{{ media.url }}" alt="..." />
+            <figcaption>{{ media.caption }}</figcaption>
+        {% else %}
         {{ media.url | raw }}
+        <figcaption>{{ media.caption }}</figcaption>
+        {% endif %}
     {% endfor %}
     </div>
 

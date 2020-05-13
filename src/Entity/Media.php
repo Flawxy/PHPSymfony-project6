@@ -27,6 +27,15 @@ class Media
     private ?string $url = null;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *     min=10,
+     *     minMessage="La légende de la vidéo doit faire au moins 10 caractères"
+     * )
+     */
+    private ?string $caption = null;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="medias")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -49,12 +58,24 @@ class Media
         return $this;
     }
 
+    public function getCaption(): ?string
+    {
+        return $this->caption;
+    }
+
+    public function setCaption(string $caption): self
+    {
+        $this->caption = $caption;
+
+        return $this;
+    }
+
     public function getTrick(): ?Trick
     {
         return $this->trick;
     }
 
-    public function setTrick(Trick $trick): self
+    public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
 
