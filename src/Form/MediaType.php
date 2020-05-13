@@ -15,12 +15,12 @@ class MediaType extends AbstractType
         $builder
             ->add('url', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Lien du media"
+                    'placeholder' => "Lien de la vidéo"
                 ]
             ])
             ->add('caption', TextType::class, [
                 'attr' => [
-                    'placeholder' => "Description du media"
+                    'placeholder' => "Description de la vidéo"
                 ]
             ])
         ;

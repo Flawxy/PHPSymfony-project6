@@ -31,7 +31,8 @@ class TrickType extends ApplicationType
             ->add('medias', CollectionType::class, [
                 'entry_type' => MediaType::class,
                 'allow_add' => true,
-                'allow_delete' => true
+                'allow_delete' => true,
+                'label' => false
             ])
         ;
     }

@@ -19,6 +19,10 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Regex(
+     *     pattern="/iframe/",
+     *     message="Le lien d'intégration doit contenir une balise <iframe>"
+     * )
      */
     private ?string $url = null;
 
@@ -26,7 +30,7 @@ class Media
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(
      *     min=10,
-     *     minMessage="La légende du média doit faire au moins 10 caractères"
+     *     minMessage="La légende de la vidéo doit faire au moins 10 caractères"
      * )
      */
     private ?string $caption = null;
