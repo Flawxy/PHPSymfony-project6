@@ -73,9 +73,6 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Url(
-     *     message="Vous devez fournir une URL valide."
-     * )
      */
     private ?string $coverImage = null;
 

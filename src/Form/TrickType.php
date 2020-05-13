@@ -7,10 +7,12 @@ use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class TrickType extends ApplicationType
 {
@@ -21,8 +23,23 @@ class TrickType extends ApplicationType
                 $this->getConfiguration('Nom', 'Indiquez le nom de la figure'))
             ->add('description', TextareaType::class,
                 $this->getConfiguration('Description', 'Indiquez la description de la figure'))
-            ->add('coverImage', TextType::class,
-                $this->getConfiguration('Image principale', "Indiquez l'image de couverture"))
+            ->add('coverImage', FileType::class, [
+                'label' => 'Image de couverture',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                            'image/svg'
+                        ],
+                        'mimeTypesMessage' => 'Merci de sélectionner un fichier image valide'
+                    ])
+                ]
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
