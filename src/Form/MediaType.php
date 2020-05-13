@@ -18,11 +18,6 @@ class MediaType extends AbstractType
                     'placeholder' => "Lien de la vidéo"
                 ]
             ])
-            ->add('caption', TextType::class, [
-                'attr' => [
-                    'placeholder' => "Description de la vidéo"
-                ]
-            ])
         ;
     }
 

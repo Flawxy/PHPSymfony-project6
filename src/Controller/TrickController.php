@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
@@ -50,6 +51,19 @@ class TrickController extends AbstractController
             if ($coverImage) {
                $coverImageName = $fileUploaderService->upload($coverImage);
                $trick->setCoverImage($coverImageName);
+            }
+
+            $images = $form['images']->getData();
+            if ($images) {
+                foreach ($images as $image) {
+                    $img = new Image();
+                    $imageName = $fileUploaderService->upload($image);
+                    $img->setName($imageName);
+                    $img->setTrick($trick);
+                    $trick->addImage($img);
+
+                    $manager->persist($img);
+                }
             }
 
             $manager->persist($trick);
@@ -131,8 +145,8 @@ class TrickController extends AbstractController
      * @param Request $request
      * @param Trick $trick
      * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploaderService
      * @return Response
-     * @throws Exception
      */
     public function edit(Request $request, Trick $trick, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
     {
@@ -152,6 +166,20 @@ class TrickController extends AbstractController
                 $coverImageName = $fileUploaderService->upload($coverImage);
                 $trick->setCoverImage($coverImageName);
             }
+
+            /*$images = $form['images']->getData();
+            if ($images) {
+                foreach ($images as $image) {
+                    $img = new Image();
+                    $imageName = $fileUploaderService->upload($image);
+                    $img->setName($imageName);
+                    $img->setTrick($trick);
+
+                    $trick->addImage($img);
+
+                    $manager->persist($img);
+                }
+            }*/
 
             $manager->persist($trick);
             $manager->flush();
