@@ -46,7 +46,7 @@ class AccountController extends AbstractController
             $manager->persist($user);
             $manager->flush();
 
-            $mailManagerService->sendValidationMail($user, $mailer);
+            /*$mailManagerService->sendValidationMail($user, $mailer);*/
 
             $this->addFlash(
                 'success',

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
+ * @ORM\Entity(repositoryClass=ImageRepository::class)
  */
-class Media
+class Image
 {
     /**
      * @ORM\Id()
@@ -19,15 +19,11 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Regex(
-     *     pattern="/iframe/",
-     *     message="Le lien d'intégration doit contenir une balise <iframe>"
-     * )
      */
-    private ?string $url = null;
+    private ?string $name = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="medias")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="images")
      * @ORM\JoinColumn(nullable=false)
      */
     private Trick $trick;
@@ -37,14 +33,14 @@ class Media
         return $this->id;
     }
 
-    public function getUrl(): ?string
+    public function getName(): ?string
     {
-        return $this->url;
+        return $this->name;
     }
 
-    public function setUrl(string $url): self
+    public function setName(string $name): self
     {
-        $this->url = $url;
+        $this->name = $name;
 
         return $this;
     }
