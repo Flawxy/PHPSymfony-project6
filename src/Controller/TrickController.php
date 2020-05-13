@@ -7,10 +7,12 @@ use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +27,10 @@ class TrickController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploaderService
      * @return Response
      */
-    public function create(Request $request, EntityManagerInterface $manager)
+    public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
     {
         $trick = new Trick();
 
@@ -42,6 +45,12 @@ class TrickController extends AbstractController
             }
 
             $trick->setCreator($this->getUser());
+
+            $coverImage = $form['coverImage']->getData();
+            if ($coverImage) {
+               $coverImageName = $fileUploaderService->upload($coverImage);
+               $trick->setCoverImage($coverImageName);
+            }
 
             $manager->persist($trick);
             $manager->flush();
@@ -125,7 +134,7 @@ class TrickController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -137,6 +146,13 @@ class TrickController extends AbstractController
                 $manager->persist($media);
             }
             $trick->updateDate();
+
+            $coverImage = $form['coverImage']->getData();
+            if ($coverImage) {
+                $coverImageName = $fileUploaderService->upload($coverImage);
+                $trick->setCoverImage($coverImageName);
+            }
+
             $manager->persist($trick);
             $manager->flush();
 

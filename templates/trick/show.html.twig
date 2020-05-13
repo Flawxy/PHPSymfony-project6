@@ -16,7 +16,7 @@
     </div>
     {% endif %}
     <h1>{{ trick.name | capitalize }}</h1>
-    <img src="{{ trick.coverImage }}" alt="...">
+    <img src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="...">
     <p>{{ trick.description | capitalize }}</p>
 
     <span class="badge badge-pill badge-info">Catégorie : {{ trick.category.name | capitalize }}</span>
