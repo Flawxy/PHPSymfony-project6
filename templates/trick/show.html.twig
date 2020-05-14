@@ -32,11 +32,11 @@
         <span class="badge badge-pill badge-success">Dernière modification : {{ trick.modificationDate | date("d/m/Y à H:i:s") }}</span>
     {% endif %}
 
-    <div>
+    {#<div>
     {% for image in trick.images %}
         <img src="{{ asset('uploads/images/' ~ image) }}" alt="...">
     {% endfor %}
-    </div>
+    </div>#}
 
     <div>
     {% for media in trick.medias %}
