@@ -53,19 +53,6 @@ class TrickController extends AbstractController
                $trick->setCoverImage($coverImageName);
             }
 
-            $images = $form['images']->getData();
-            if ($images) {
-                foreach ($images as $image) {
-                    $img = new Image();
-                    $imageName = $fileUploaderService->upload($image);
-                    $img->setName($imageName);
-                    $img->setTrick($trick);
-                    $trick->addImage($img);
-
-                    $manager->persist($img);
-                }
-            }
-
             $manager->persist($trick);
             $manager->flush();
 

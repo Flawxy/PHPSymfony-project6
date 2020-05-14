@@ -46,11 +46,6 @@ class TrickType extends ApplicationType
                 'choice_label' => 'name',
                 'label' => 'Catégorie'
             ])
-            ->add('images', CollectionType::class, [
-                'entry_type' => ImageType::class,
-                'allow_add' => true,
-                'label' => false
-            ])
             ->add('medias', CollectionType::class, [
                 'entry_type' => MediaType::class,
                 'allow_add' => true,
