@@ -53,6 +53,19 @@ class TrickController extends AbstractController
                $trick->setCoverImage($coverImageName);
             }
 
+            $images = $form['images']->getData();
+            if ($images) {
+                foreach ($images as $image) {
+                    $img = new Image();
+                    $imageName = $fileUploaderService->upload($image);
+                    $img->setTrick($trick);
+                    $img->setName($imageName);
+                    $trick->addImage($img);
+                    $trick->removeNotImageFile($image);
+                    $manager->persist($img);
+                }
+            }
+
             $manager->persist($trick);
             $manager->flush();
 
@@ -68,7 +81,6 @@ class TrickController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
 
     /**
      * Displays all the tricks
@@ -154,19 +166,18 @@ class TrickController extends AbstractController
                 $trick->setCoverImage($coverImageName);
             }
 
-            /*$images = $form['images']->getData();
+            $images = $form['images']->getData();
             if ($images) {
                 foreach ($images as $image) {
                     $img = new Image();
                     $imageName = $fileUploaderService->upload($image);
-                    $img->setName($imageName);
                     $img->setTrick($trick);
-
+                    $img->setName($imageName);
                     $trick->addImage($img);
-
+                    $trick->removeNotImageFile($image);
                     $manager->persist($img);
                 }
-            }*/
+            }
 
             $manager->persist($trick);
             $manager->flush();
