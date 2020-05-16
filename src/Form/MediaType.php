@@ -14,6 +14,7 @@ class MediaType extends AbstractType
     {
         $builder
             ->add('url', TextType::class, [
+                'label' => 'Entrez le lien de la vidéo',
                 'attr' => [
                     'placeholder' => "Lien de la vidéo"
                 ]

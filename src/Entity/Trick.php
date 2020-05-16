@@ -315,9 +315,4 @@ class Trick
 
         return $this;
     }
-
-    public function removeNotImageFile($file)
-    {
-        $this->images->removeElement($file);
-    }
 }
