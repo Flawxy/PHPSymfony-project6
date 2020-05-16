@@ -33,15 +33,41 @@
     {% endif %}
 
     <div>
-    {% for image in trick.images %}
-        <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="...">
-    {% endfor %}
+    {% if trick.images | length > 0 %}
+        {% for image in trick.images %}
+            <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="...">
+            {% if app.user %}
+                <div>
+                    <a href="{{ path('image_edit', {'id' : image.id}) }}"><span class="far fa-edit"></span></a>
+                    <a href="{{ path('image_delete', {'id' : image.id}) }}"
+                       onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette image ?`)">
+                        <span class="far fa-trash-alt"></span>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Aucune image d'illustration n'a été postée pour le moment.
+    {% endif %}
     </div>
 
     <div>
-    {% for media in trick.medias %}
-        {{ media.url | raw }}
-    {% endfor %}
+    {% if trick.medias | length > 0 %}
+        {% for media in trick.medias %}
+            {{ media.url | raw }}
+            {% if app.user %}
+                <div>
+                    <a href="{{ path('media_edit', {'id' : media.id}) }}"><span class="far fa-edit"></span></a>
+                    <a href="{{ path('media_delete', {'id' : media.id}) }}"
+                       onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette vidéo ?`)">
+                        <span class="far fa-trash-alt"></span>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Aucune vidéo d'illustration n'a été postée pour le moment.
+    {% endif %}
     </div>
 
     <div class="mt-3">
