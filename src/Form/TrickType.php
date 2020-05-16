@@ -54,6 +54,7 @@ class TrickType extends ApplicationType
             ])
             ->add('images', CollectionType::class, [
                 'entry_type' => FileType::class,
+                'mapped' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => false
