@@ -61,7 +61,6 @@ class TrickController extends AbstractController
                     $img->setTrick($trick);
                     $img->setName($imageName);
                     $trick->addImage($img);
-                    $trick->removeNotImageFile($image);
                     $manager->persist($img);
                 }
             }
@@ -174,7 +173,6 @@ class TrickController extends AbstractController
                     $img->setTrick($trick);
                     $img->setName($imageName);
                     $trick->addImage($img);
-                    $trick->removeNotImageFile($image);
                     $manager->persist($img);
                 }
             }
