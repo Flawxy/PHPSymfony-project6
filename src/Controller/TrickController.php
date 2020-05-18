@@ -3,15 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
+use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,9 +29,10 @@ class TrickController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploaderService
      * @return Response
      */
-    public function create(Request $request, EntityManagerInterface $manager)
+    public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
     {
         $trick = new Trick();
 
@@ -43,6 +47,24 @@ class TrickController extends AbstractController
             }
 
             $trick->setCreator($this->getUser());
+
+            $coverImage = $form['coverImage']->getData();
+            if ($coverImage) {
+               $coverImageName = $fileUploaderService->upload($coverImage);
+               $trick->setCoverImage($coverImageName);
+            }
+
+            $images = $form['images']->getData();
+            if ($images) {
+                foreach ($images as $image) {
+                    $img = new Image();
+                    $imageName = $fileUploaderService->upload($image);
+                    $img->setTrick($trick);
+                    $img->setName($imageName);
+                    $trick->addImage($img);
+                    $manager->persist($img);
+                }
+            }
 
             $manager->persist($trick);
             $manager->flush();
@@ -59,7 +81,6 @@ class TrickController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
 
     /**
      * Displays all the tricks
@@ -128,10 +149,10 @@ class TrickController extends AbstractController
      * @param Request $request
      * @param Trick $trick
      * @param EntityManagerInterface $manager
+     * @param FileUploaderService $fileUploaderService
      * @return Response
-     * @throws Exception
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -143,6 +164,25 @@ class TrickController extends AbstractController
                 $manager->persist($media);
             }
             $trick->updateDate();
+
+            $coverImage = $form['coverImage']->getData();
+            if ($coverImage) {
+                $coverImageName = $fileUploaderService->upload($coverImage);
+                $trick->setCoverImage($coverImageName);
+            }
+
+            $images = $form['images']->getData();
+            if ($images) {
+                foreach ($images as $image) {
+                    $img = new Image();
+                    $imageName = $fileUploaderService->upload($image);
+                    $img->setTrick($trick);
+                    $img->setName($imageName);
+                    $trick->addImage($img);
+                    $manager->persist($img);
+                }
+            }
+
             $manager->persist($trick);
             $manager->flush();
 

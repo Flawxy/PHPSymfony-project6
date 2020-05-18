@@ -11,11 +11,12 @@ security:
                 property: nickname
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|uploads/images|js)/
             security: false
         main:
             anonymous: lazy
             provider: in_database
+            user_checker: App\Security\UserChecker
             form_login:
                 login_path: account_login
                 check_path: account_login

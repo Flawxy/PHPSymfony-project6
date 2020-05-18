@@ -26,3 +26,32 @@ function updateCounter() {
 updateCounter();
 
 handleDeleteButtons();
+
+$('#add-image').click(() => {
+    const index = +$('#widgets-counter2').val();
+    const template = $('#trick_images').data('prototype').replace(/__name__/g, index);
+
+    $('#trick_images').append(template);
+
+    $('#widgets-counter2').val(index + 1);
+
+    handleDeleteButtons();
+});
+
+function handleDeleteButtons2() {
+    $('button[data-action="delete"]').click(function() {
+        const target = this.dataset.target;
+
+        $(target).remove();
+    });
+}
+
+function updateCounter2() {
+    const count = +$('#trick_images div.form-group').length;
+
+    $('#widgets-counter2').val(count);
+}
+
+updateCounter2();
+
+handleDeleteButtons2();

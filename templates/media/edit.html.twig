@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'une vidéo{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Modifier une vidéo de la figure {{ video.trick.name }}</h1>
+        <iframe width="560" height="315" src="{{ video.url }}" allowfullscreen></iframe>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-primary">
+            Modifier la vidéo
+        </button>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

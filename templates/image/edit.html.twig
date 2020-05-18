@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'une image{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <h1>Modifier une image de la figure {{ image.trick.name }}</h1>
+        <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="...">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-primary">
+            Modifier l'image
+        </button>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

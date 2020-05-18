@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de l'image de couverture{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Modifier l'image de couverture de la figure {{ trick.name }}</h1>
+        <img src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="...">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-primary">
+            Modifier l'image
+        </button>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
