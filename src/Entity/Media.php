@@ -20,8 +20,8 @@ class Media
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Regex(
-     *     pattern="/iframe/",
-     *     message="Le lien d'intégration doit contenir une balise <iframe>"
+     *     pattern="/embed/",
+     *     message="Le lien d'intégration doit être de type embed"
      * )
      */
     private ?string $url = null;
