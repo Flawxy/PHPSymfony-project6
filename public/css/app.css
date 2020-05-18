@@ -13,3 +13,13 @@
     max-width: 24px;
     max-height: 24px;
 }
+
+label[for="comment_content"]
+{
+    display: none;
+}
+
+.authorIsCreator {
+    color: gold;
+    font-weight: bold;
+}
