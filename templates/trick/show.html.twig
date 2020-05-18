@@ -49,6 +49,7 @@
         {% if trick.modificationDate %}
             <span class="badge badge-pill badge-success d-flex flex-column justify-content-center">Dernière modification : {{ trick.modificationDate | date("d/m/Y à H:i:s") }}</span>
         {% endif %}
+    </div>
     <hr>
     <p>{{ trick.description | capitalize }}</p>
     <hr>
@@ -157,6 +158,5 @@
         Il n'y a actuellement aucun commentaire sur cette figure.
     {% endif %}
     </div>
-</div>
 </div>
 {% endblock %}
