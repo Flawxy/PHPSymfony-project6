@@ -30,3 +30,8 @@ label[for="comment_content"]
 {
     display: none;
 }
+
+.authorIsCreator {
+    color: gold;
+    font-weight: bold;
+}

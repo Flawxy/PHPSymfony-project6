@@ -7,6 +7,7 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\FileUploaderService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -102,9 +103,10 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param CommentRepository $commentRepository
      * @return Response
      */
-    public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
+    public function show(Trick $trick, Request $request, EntityManagerInterface $manager, CommentRepository $commentRepository)
     {
         $comment = new Comment();
 
@@ -131,7 +133,11 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'comments' => $commentRepository->findBy(
+                ['trick' => $trick->getId()],
+                ['date' => 'DESC']
+            )
         ]);
     }
 
