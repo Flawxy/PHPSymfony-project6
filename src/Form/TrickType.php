@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\Image;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -47,6 +48,13 @@ class TrickType extends ApplicationType
             ])
             ->add('medias', CollectionType::class, [
                 'entry_type' => MediaType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'label' => false
+            ])
+            ->add('images', CollectionType::class, [
+                'entry_type' => FileType::class,
+                'mapped' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => false
