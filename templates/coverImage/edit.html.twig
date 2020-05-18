@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modification d'une vidéo{% endblock %}
+{% block title %}Modification de l'image de couverture{% endblock %}
 
 {% block body %}
     <div class="container">
-        <h1>Modifier une vidéo de la figure {{ video.trick.name }}</h1>
-        <iframe width="560" height="315" src="{{ video.url }}" allowfullscreen></iframe>
+        <h1>Modifier l'image de couverture de la figure {{ trick.name }}</h1>
+        <img src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="...">
         {{ form_start(form) }}
         {{ form_widget(form) }}
 
         <button type="submit" class="btn btn-primary">
-            Modifier la vidéo
+            Modifier l'image
         </button>
 
         {{ form_end(form) }}

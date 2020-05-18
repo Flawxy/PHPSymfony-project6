@@ -4,7 +4,8 @@
 
 {% block body %}
     <div class="container">
-        <h1>Modifier une image</h1>
+
+        <h1>Modifier une image de la figure {{ image.trick.name }}</h1>
         <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="...">
         {{ form_start(form) }}
         {{ form_widget(form) }}

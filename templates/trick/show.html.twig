@@ -4,69 +4,101 @@
 
 {% block body %}
 <div class="container">
-    {% if app.user %}
-    <div class="mt-3">
-        <a href="{{ path('tricks_edit', {'slug' : trick.slug}) }}" class="btn btn-warning">
-            Modifier la figure
-        </a>
-        <a href="{{ path('tricks_delete', {'slug' : trick.slug}) }}" class="btn btn-danger"
-        onclick="return confirm(`Êtes-vous sûr de vouloir supprimer la figure {{ trick.name }} ?`)">
-            Supprimer la figure
+    <div class="row">
+        <h1>{{ trick.name | capitalize }}</h1>
+        {% if app.user %}
+            <div>
+                <a href="{{ path('tricks_edit', {'slug' : trick.slug}) }}">
+                    <span class="fas fa-pencil-alt text-info"></span>
+                </a>
+                <a href="{{ path('tricks_delete', {'slug' : trick.slug}) }}"
+                   onclick="return confirm(`Êtes-vous sûr de vouloir supprimer la figure {{ trick.name }} ?`)">
+                    <span class="far fa-trash-alt text-danger"></span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        {% if app.user %}
+            <div class="float-right">
+                <a href="{{ path('cover_edit', {'id' : trick.id}) }}">
+                    <span class="fas fa-pencil-alt text-info"></span>
+                </a>
+                <a href="{{ path('cover_delete', {'id' : trick.id}) }}"
+                   onclick="return confirm(`Êtes-vous sûr de vouloir supprimer l'image de couverture de la figure {{ trick.name }} ?`)">
+                    <span class="far fa-trash-alt text-danger"></span>
+                </a>
+            </div>
+        {% endif %}
+        <a href="{{ asset('uploads/images/' ~ trick.coverImage) }}" target="_blank">
+            <img style="height: 300px; width: 100%;" src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="...">
         </a>
     </div>
-    {% endif %}
-    <h1>{{ trick.name | capitalize }}</h1>
-    <img src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="...">
-    <p>{{ trick.description | capitalize }}</p>
 
-    <span class="badge badge-pill badge-info">Catégorie : {{ trick.category.name | capitalize }}</span>
-    {% if trick.creator %}
-        <span class="badge badge-pill badge-primary">
+    <div class="d-flex justify-content-around">
+        <span class="badge badge-pill badge-info d-flex flex-column justify-content-center">Catégorie : {{ trick.category.name | capitalize }}</span>
+        {% if trick.creator %}
+            <span class="badge badge-pill badge-primary">
             Créateur :
             <img src="{{ trick.creator.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ trick.creator.nickname }}">
             {{ trick.creator.nickname }}
         </span>
-    {% endif %}
-    <span class="badge badge-pill badge-success">Date de création : {{ trick.creationDate | date("d/m/Y à H:i:s") }}</span>
-    {% if trick.modificationDate %}
-        <span class="badge badge-pill badge-success">Dernière modification : {{ trick.modificationDate | date("d/m/Y à H:i:s") }}</span>
-    {% endif %}
-
-    <div>
-    {% if trick.images | length > 0 %}
-        {% for image in trick.images %}
-            <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="...">
-            {% if app.user %}
-                <div>
-                    <a href="{{ path('image_edit', {'id' : image.id}) }}"><span class="far fa-edit"></span></a>
-                    <a href="{{ path('image_delete', {'id' : image.id}) }}"
-                       onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette image ?`)">
-                        <span class="far fa-trash-alt"></span>
-                    </a>
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        Aucune image d'illustration n'a été postée pour le moment.
-    {% endif %}
+        {% endif %}
+        <span class="badge badge-pill badge-success d-flex flex-column justify-content-center">Date de création : {{ trick.creationDate | date("d/m/Y à H:i:s") }}</span>
+        {% if trick.modificationDate %}
+            <span class="badge badge-pill badge-success d-flex flex-column justify-content-center">Dernière modification : {{ trick.modificationDate | date("d/m/Y à H:i:s") }}</span>
+        {% endif %}
     </div>
 
-    <div>
-    {% if trick.medias | length > 0 %}
-        {% for media in trick.medias %}
-            {{ media.url | raw }}
-            {% if app.user %}
-                <div>
-                    <a href="{{ path('media_edit', {'id' : media.id}) }}"><span class="far fa-edit"></span></a>
-                    <a href="{{ path('media_delete', {'id' : media.id}) }}"
-                       onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette vidéo ?`)">
-                        <span class="far fa-trash-alt"></span>
+
+    <p>{{ trick.description | capitalize }}</p>
+
+    <div class="row d-flex justify-content-center">
+    {% if trick.images | length > 0 %}
+        {% for image in trick.images %}
+            <div class="mx-3">
+                <a href="{{ asset('uploads/images/' ~ image.name) }}" target="_blank">
+                    <img style="height: 250px; width: 250px;" src="{{ asset('uploads/images/' ~ image.name) }}" alt="...">
+                </a>
+                {% if app.user %}
+                <div class="d-flex justify-content-around">
+                    <a href="{{ path('image_edit', {'id' : image.id}) }}">
+                        <span class="fas fa-pencil-alt text-info"></span>
+                    </a>
+                    <a href="{{ path('image_delete', {'id' : image.id}) }}"
+                       onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette image ?`)">
+                        <span class="far fa-trash-alt text-danger"></span>
                     </a>
                 </div>
-            {% endif %}
+                {% endif %}
+            </div>
         {% endfor %}
     {% else %}
-        Aucune vidéo d'illustration n'a été postée pour le moment.
+            {% set noImage = 'true' %}
+    {% endif %}
+    {% if trick.medias | length > 0 %}
+        {% for media in trick.medias %}
+            <div class="mx-3">
+                <iframe width="250" height="250" src="{{ media.url }}" allowfullscreen></iframe>
+                {% if app.user %}
+                    <div class="d-flex justify-content-around">
+                        <a href="{{ path('media_edit', {'id' : media.id}) }}">
+                            <span class="fas fa-pencil-alt text-info"></span>
+                        </a>
+                        <a href="{{ path('media_delete', {'id' : media.id}) }}"
+                           onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette vidéo ?`)">
+                            <span class="far fa-trash-alt text-danger"></span>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        {% set noVideo = 'true' %}
+    {% endif %}
+    {% if noImage is defined and noVideo is defined %}
+        Aucune vidéo ou image d'illustration actuellement.
     {% endif %}
     </div>
 
