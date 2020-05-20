@@ -82,6 +82,11 @@ class User implements UserInterface
      */
     private ?string $confirmationToken = null;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $resetToken = null;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -117,7 +122,15 @@ class User implements UserInterface
         $picture .= $number . '.jpg';
 
         $this->profilePicture = $picture;
+    }
 
+    public function createResetPasswordToken()
+    {
+        $randomString = random_bytes(10);
+
+        $token = md5($randomString);
+
+        $this->resetToken = $token;
     }
 
     public function getId(): ?int
@@ -269,6 +282,18 @@ class User implements UserInterface
     public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
 
         return $this;
     }

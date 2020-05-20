@@ -39,7 +39,7 @@
     <div class="d-flex justify-content-around">
         <span class="badge badge-pill badge-info d-flex flex-column justify-content-center">Catégorie : {{ trick.category.name | capitalize }}</span>
         {% if trick.creator %}
-            <span class="badge badge-pill badge-primary">
+        <span class="badge badge-pill badge-primary">
             Créateur :
             <img src="{{ trick.creator.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ trick.creator.nickname }}">
             {{ trick.creator.nickname }}
