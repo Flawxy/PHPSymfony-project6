@@ -219,6 +219,8 @@ class AccountController extends AbstractController
             $hashedPassword = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
 
+            $user->setResetToken(null);
+
             $manager->persist($user);
             $manager->flush();
 
@@ -231,7 +233,8 @@ class AccountController extends AbstractController
         }
 
         return $this->render('account/createNewPassword.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'user' => $user
         ]);
     }
 }
