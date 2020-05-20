@@ -6,7 +6,7 @@
 
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ path('homepage') }}">Accueil<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
@@ -17,7 +17,7 @@
                     <a href="{{ path('tricks_create') }}" class="nav-link">Créer une figure</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('account_logout') }}" class="nav-link">Déconnexion</a>
+                    <a href="{{ path('account_update_password') }}" class="nav-link">Changer de mot de passe</a>
                 </li>
             {% else %}
                 <li class="nav-item">
@@ -28,6 +28,19 @@
                 </li>
             {% endif %}
         </ul>
+        {% if app.user %}
+        <ul class="navbar-nav d-flex flex-column align-items-center">
+            <li class="nav-item my-2 my-lg-0 text-secondary">
+                <span class="badge badge-pill badge-primary">
+                    <img src="{{ app.user.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ app.user.profilePicture }}">
+                    {{ app.user.nickname }}
+                </span>
+            </li>
+            <li class="nav-item">
+                <a href="{{ path('account_logout') }}" class="nav-link">Déconnexion</a>
+            </li>
+        </ul>
+        {% endif %}
     </div>
 </nav>
 
