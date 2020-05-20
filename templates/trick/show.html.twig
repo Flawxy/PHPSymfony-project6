@@ -118,11 +118,28 @@
     </div>
     <hr>
     <div class="mt-3">
-    {% if comments | length > 0 %}
+    {% if trick.comments | length > 0 %}
         <span class="d-flex justify-content-center mb-2">
-            Il y a actuellement {{ comments | length }} commentaire{% if comments | length > 1%}s{% endif%} concernant cette figure !
+            Il y a actuellement {{ trick.comments | length }} commentaire{% if trick.comments | length > 1%}s{% endif%} concernant cette figure !
         </span>
-        {% for comment in comments %}
+        <div class="d-flex justify-content-center">
+            {% set page = pagination.currentPage %}
+            {% set pages = pagination.pages %}
+            <ul class="pagination pagination-sm">
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('tricks_show', {'slug': trick.slug, 'page': page - 1}) }}">&laquo;</a>
+                </li>
+                {% for i in 1..pages %}
+                <li class="page-item {% if i == page %}active{% endif %}">
+                    <a class="page-link" href="{{ path('tricks_show', {'slug': trick.slug, 'page': i}) }}">{{ i }}</a>
+                </li>
+                {% endfor %}
+                <li class="page-item {% if page == pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('tricks_show', {'slug': trick.slug, 'page': page + 1}) }}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+        {% for comment in pagination.data %}
             {% if comment.author.nickname == trick.creator.nickname %}
                 {% set authorIsCreator = 'true' %}
             {% else %}

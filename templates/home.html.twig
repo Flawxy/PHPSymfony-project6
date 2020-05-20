@@ -10,4 +10,38 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
+    <div>
+        {% if tricks | length > 0 %}
+            <span class="d-flex justify-content-center mb-2">
+            Il y a actuellement {{ tricks | length }} figure{% if tricks | length > 1%}s{% endif%} sur le site !
+            </span>
+            <div class="d-flex justify-content-center">
+                {% set page = pagination.currentPage %}
+                {% set pages = pagination.pages %}
+                <ul class="pagination pagination-sm">
+                    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="{{ path('homepage', {'page': page - 1}) }}">&laquo;</a>
+                    </li>
+                    {% for i in 1..pages %}
+                        <li class="page-item {% if i == page %}active{% endif %}">
+                            <a class="page-link" href="{{ path('homepage', {'page': i}) }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                    <li class="page-item {% if page == pages %}disabled{% endif %}">
+                        <a class="page-link" href="{{ path('homepage', {'page': page + 1}) }}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+            {% for trick in pagination.data %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <h3 class="card-header"><a href="{{ path('tricks_show', {'slug': trick.slug}) }}">{{ trick.name }}</a></h3>
+                        <img style="height: 200px; width: 100%; display: block;" src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="..." />
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            Il n'y a actuellement aucune figure enregistrée sur le site...
+        {% endif %}
+    </div>
 {% endblock %}

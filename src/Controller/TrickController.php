@@ -10,6 +10,7 @@ use App\Form\TrickType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\FileUploaderService;
+use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -99,15 +100,24 @@ class TrickController extends AbstractController
     /**
      * Displays one particular trick
      *
-     * @Route("/tricks/{slug}", name="tricks_show")
+     * @Route("/tricks/{slug}/{page<\d+>?1}", name="tricks_show")
      * @param Trick $trick
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param CommentRepository $commentRepository
+     * @param PaginationService $paginationService
+     * @param int $page
      * @return Response
      */
-    public function show(Trick $trick, Request $request, EntityManagerInterface $manager, CommentRepository $commentRepository)
+    public function show(Trick $trick, Request $request, EntityManagerInterface $manager, CommentRepository $commentRepository, PaginationService $paginationService, $page)
     {
+        $paginationService
+            ->setEntityClass(Comment::class)
+            ->setPropertyName('trick')
+            ->setPropertyValue($trick->getId())
+            ->setPropertyToOrderBy('date')
+            ->setCurrentPage($page);
+
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -134,10 +144,7 @@ class TrickController extends AbstractController
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
-            'comments' => $commentRepository->findBy(
-                ['trick' => $trick->getId()],
-                ['date' => 'DESC']
-            )
+            'pagination' => $paginationService
         ]);
     }
 
