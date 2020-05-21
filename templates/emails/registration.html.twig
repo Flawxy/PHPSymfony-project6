@@ -3,7 +3,7 @@
 <p>Bonjour {{ user.nickname }}! Merci pour votre inscription sur SnowTricks !</p>
 
 <p>Afin de finaliser votre enregistrement, merci de cliquer sur
-    <a href="{{ path('account_validation', { 'confirmationToken' : user.confirmationToken }) }}">
+    <a href="{{ url('account_validation', { 'confirmationToken' : user.confirmationToken }) }}">
         ce lien !
     </a>
 </p>

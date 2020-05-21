@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class PaginationService
 {
-
     private ?string $entityClass;
     private ?string $propertyName = null;
     private $propertyValue = null;

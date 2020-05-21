@@ -23,11 +23,7 @@ class FileUploaderService
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
-        try {
-            $file->move($this->getTargetDirectory(), $fileName);
-        } catch (FileException $e) {
-            // ... handle exception if something happens during file upload
-        }
+        $file->move($this->getTargetDirectory(), $fileName);
 
         return $fileName;
     }

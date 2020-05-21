@@ -3,7 +3,7 @@
 <p>Bonjour {{ user.nickname }}! Vous avez fait une demande de reset de mot de passe.</p>
 
 <p>Afin de créer un nouveau mot de passe, merci de cliquer sur
-    <a href="{{ path('account_create_new_password', { 'resetToken' : user.resetToken }) }}">
+    <a href="{{ url('account_create_new_password', { 'resetToken' : user.resetToken }) }}">
         ce lien !
     </a>
 </p>
