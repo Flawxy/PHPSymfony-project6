@@ -10,6 +10,7 @@ use App\Form\TrickType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\FileUploaderService;
+use App\Service\ImageManagementService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -31,9 +32,10 @@ class TrickController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param FileUploaderService $fileUploaderService
+     * @param ImageManagementService $imageManagementService
      * @return Response
      */
-    public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
+    public function create(Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploaderService, ImageManagementService $imageManagementService)
     {
         $trick = new Trick();
 
@@ -42,6 +44,30 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+
+            $images = $form['images']->getData();
+            if ($images) {
+                foreach ($images as $image) {
+                    $imageName = $fileUploaderService->upload($image);
+                    if  (!$imageManagementService->isFileAnImage($imageName)) {
+                        $imageManagementService->deleteAnImageFromTheUploadDirectory($imageName);
+                        $this->addFlash(
+                            'warning',
+                            "Le fichier que vous avez choisi n'est pas une image !"
+                        );
+
+                        return $this->render('trick/new.html.twig', [
+                            'form' => $form->createView()
+                        ]);
+                    }
+                    $img = new Image();
+                    $img->setTrick($trick);
+                    $img->setName($imageName);
+                    $trick->addImage($img);
+                    $manager->persist($img);
+                }
+            }
+
             foreach ($trick->getMedias() as $media) {
                 $media->setTrick($trick);
                 $manager->persist($media);
@@ -53,19 +79,17 @@ class TrickController extends AbstractController
             if ($coverImage) {
                $coverImageName = $fileUploaderService->upload($coverImage);
                $trick->setCoverImage($coverImageName);
+            } else {
+                $this->addFlash(
+                    'warning',
+                    "Vous devez sélectionner une image de couverture pour la figure !"
+                );
+
+                return $this->render('trick/new.html.twig', [
+                    'form' => $form->createView()
+                ]);
             }
 
-            $images = $form['images']->getData();
-            if ($images) {
-                foreach ($images as $image) {
-                    $img = new Image();
-                    $imageName = $fileUploaderService->upload($image);
-                    $img->setTrick($trick);
-                    $img->setName($imageName);
-                    $trick->addImage($img);
-                    $manager->persist($img);
-                }
-            }
 
             $manager->persist($trick);
             $manager->flush();
@@ -157,9 +181,10 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @param EntityManagerInterface $manager
      * @param FileUploaderService $fileUploaderService
+     * @param ImageManagementService $imageManagementService
      * @return Response
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager, FileUploaderService $fileUploaderService, ImageManagementService $imageManagementService)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -181,8 +206,20 @@ class TrickController extends AbstractController
             $images = $form['images']->getData();
             if ($images) {
                 foreach ($images as $image) {
-                    $img = new Image();
                     $imageName = $fileUploaderService->upload($image);
+                    if  (!$imageManagementService->isFileAnImage($imageName)) {
+                        $imageManagementService->deleteAnImageFromTheUploadDirectory($imageName);
+                        $this->addFlash(
+                            'warning',
+                            "Le fichier que vous avez choisi n'est pas une image !"
+                        );
+
+                        return $this->render('trick/edit.html.twig', [
+                            'form' => $form->createView(),
+                            'trick' => $trick
+                        ]);
+                    }
+                    $img = new Image();
                     $img->setTrick($trick);
                     $img->setName($imageName);
                     $trick->addImage($img);
@@ -215,16 +252,25 @@ class TrickController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @param Trick $trick
      * @param EntityManagerInterface $manager
+     * @param ImageManagementService $imageManagementService
      * @return RedirectResponse
      */
-    public function delete(Trick $trick, EntityManagerInterface $manager)
+    public function delete(Trick $trick, EntityManagerInterface $manager, ImageManagementService $imageManagementService)
     {
+        if ($trick->getImages()) {
+           foreach ($trick->getImages() as $image) {
+               $imageManagementService->deleteAnImageFromTheUploadDirectory($image->getName());
+           }
+        }
+
+        $imageManagementService->deleteAnImageFromTheUploadDirectory($trick->getCoverImage());
+
         $manager->remove($trick);
         $manager->flush();
 
         $this->addFlash(
             'success',
-            "L'annonce <strong>{$trick->getName()}</strong> a bien été supprimée !"
+            "La figure <strong>{$trick->getName()}</strong> a bien été supprimée !"
         );
 
         return $this->redirectToRoute('tricks_index');

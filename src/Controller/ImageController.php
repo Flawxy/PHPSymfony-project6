@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Form\ImageType;
 use App\Service\FileUploaderService;
+use App\Service\ImageManagementService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,9 +25,10 @@ class ImageController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param FileUploaderService $fileUploaderService
+     * @param ImageManagementService $imageManagementService
      * @return Response
      */
-    public function edit(Image $image, Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploaderService)
+    public function edit(Image $image, Request $request, EntityManagerInterface $manager, FileUploaderService $fileUploaderService, ImageManagementService $imageManagementService)
     {
         $form = $this->createForm(ImageType::class, $image);
         $trick = $image->getTrick();
@@ -34,12 +36,15 @@ class ImageController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $manager->remove($image);
             $newImage = new Image();
             $imageName = $fileUploaderService->upload($form['name']->getData());
             $newImage->setTrick($trick);
             $newImage->setName($imageName);
             $trick->addImage($newImage);
+
+            /* Deletes the old image from the DB and the upload directory */
+            $imageManagementService->deleteAnImageFromTheUploadDirectory($image->getName());
+            $manager->remove($image);
 
             $manager->persist($newImage);
             $manager->persist($trick);
@@ -69,10 +74,13 @@ class ImageController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @param Image $image
      * @param EntityManagerInterface $manager
+     * @param ImageManagementService $imageManagementService
      * @return RedirectResponse
      */
-    public function delete(Image $image, EntityManagerInterface $manager)
+    public function delete(Image $image, EntityManagerInterface $manager, ImageManagementService $imageManagementService)
     {
+        /* Deletes the old image from the DB and the upload directory */
+        $imageManagementService->deleteAnImageFromTheUploadDirectory($image->getName());
         $manager->remove($image);
         $manager->flush();
 
