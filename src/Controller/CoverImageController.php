@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Form\CoverImageType;
 use App\Repository\ImageRepository;
 use App\Service\FileUploaderService;
+use App\Service\ImageManagementService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,12 +69,14 @@ class CoverImageController extends AbstractController
      * @param Trick $trick
      * @param EntityManagerInterface $manager
      * @param ImageRepository $imageRepository
+     * @param ImageManagementService $imageManagementService
      * @return RedirectResponse
      */
-    public function delete(Trick $trick, EntityManagerInterface $manager, ImageRepository $imageRepository)
+    public function delete(Trick $trick, EntityManagerInterface $manager, ImageRepository $imageRepository, ImageManagementService $imageManagementService)
     {
         if ($trick->getImages()->count() > 0)
         {
+            $imageManagementService->deleteAnImageFromTheUploadDirectory($trick->getCoverImage());
 
             /** @var Image $newCoverImage */
             $newCoverImage = $imageRepository->findOneByTrick($trick->getId());
