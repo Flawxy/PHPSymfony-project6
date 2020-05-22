@@ -35,3 +35,10 @@ label[for="comment_content"]
     color: gold;
     font-weight: bold;
 }
+
+.alertContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
