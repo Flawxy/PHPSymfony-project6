@@ -26,6 +26,7 @@ class Comment
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank(
+     *     normalizer="trim",
      *     message="Vous devez écrire un commentaire !"
      * )
      * @Assert\Length(

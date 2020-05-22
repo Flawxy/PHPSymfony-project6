@@ -28,7 +28,12 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(
+     *     normalizer="trim",
      *     message="Vous devez choisir un pseudonyme."
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[a-z0-9]+$/i",
+     *     message="Votre pseudonyme ne peut comporter que des caractères alphanumériques !"
      * )
      */
     private ?string $nickname = null;

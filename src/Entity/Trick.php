@@ -27,6 +27,10 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     normalizer="trim",
+     *     message="Vous devez préciser le nom de la figure !"
+     * )
      */
     private ?string $name = null;
 
@@ -37,6 +41,14 @@ class Trick
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(
+     *     normalizer="trim",
+     *     message="Vous devez écrire une description !"
+     * )
+     * @Assert\Length(
+     *     min="20",
+     *     minMessage="La description doit faire au moins 20 caractères !"
+     * )
      */
     private ?string $description = null;
 
@@ -58,6 +70,7 @@ class Trick
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
+     * @Assert\Valid()
      */
     private Collection $comments;
 
