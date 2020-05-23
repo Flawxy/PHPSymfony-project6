@@ -99,25 +99,11 @@ class TrickController extends AbstractController
                 "La figure <strong>{$trick->getName()}</strong> a bien été enregistrée !"
             );
 
-            return $this->redirectToRoute('tricks_index');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('trick/new.html.twig', [
             'form' => $form->createView()
-        ]);
-    }
-
-    /**
-     * Displays all the tricks
-     *
-     * @Route("/tricks", name="tricks_index")
-     * @param TrickRepository $repo
-     * @return Response
-     */
-    public function index(TrickRepository $repo)
-    {
-        return $this->render('trick/index.html.twig', [
-            'tricks' => $repo->findAll()
         ]);
     }
 
@@ -273,6 +259,6 @@ class TrickController extends AbstractController
             "La figure <strong>{$trick->getName()}</strong> a bien été supprimée !"
         );
 
-        return $this->redirectToRoute('tricks_index');
+        return $this->redirectToRoute('homepage');
     }
 }
