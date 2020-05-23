@@ -46,6 +46,8 @@ class ImageController extends AbstractController
             $imageManagementService->deleteAnImageFromTheUploadDirectory($image->getName());
             $manager->remove($image);
 
+            $trick->updateDate();
+
             $manager->persist($newImage);
             $manager->persist($trick);
         

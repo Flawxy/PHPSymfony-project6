@@ -38,6 +38,8 @@ class MediaController extends AbstractController
             $newMedia->setTrick($trick);
             $trick->addMedia($newMedia);
 
+            $trick->updateDate();
+
             $manager->persist($newMedia);
             $manager->persist($trick);
 

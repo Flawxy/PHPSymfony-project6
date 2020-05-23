@@ -10,6 +10,23 @@ footer {
     bottom: 0;
 }
 
+.homepageHeader {
+    position: relative;
+    height: 100vh;
+    background-image: url("/images/headerCover.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.headerArrow span {
+    font-size: 5rem;
+    color: black;
+    position: absolute;
+    bottom: 10rem;
+    right: 8rem;
+}
+
 .avatar {
     max-width: 128px;
     max-height: 128px;
@@ -29,6 +46,11 @@ footer {
 label[for="comment_content"]
 {
     display: none;
+}
+
+.carouselChevron {
+    font-size: 2em;
+    color: black;
 }
 
 .authorIsCreator {

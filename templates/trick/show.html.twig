@@ -32,12 +32,12 @@
             </div>
         {% endif %}
         <a href="{{ asset('uploads/images/' ~ trick.coverImage) }}" target="_blank">
-            <img style="height: 300px; width: 100%;" src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="...">
+            <img style="max-height: 40rem; width: 100%;" src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="Image de couverture de la figure {{ trick.name }}">
         </a>
     </div>
 
-    <div class="d-flex justify-content-around">
-        <span class="badge badge-pill badge-info d-flex flex-column justify-content-center">Catégorie : {{ trick.category.name | capitalize }}</span>
+    <div class="d-sm-block d-md-flex justify-content-md-around">
+        <span class="badge badge-pill badge-info d-sm-block d-md-flex flex-md-column justify-content-center">Catégorie : {{ trick.category.name | capitalize }}</span>
         {% if trick.creator %}
         <span class="badge badge-pill badge-primary">
             Créateur :
@@ -45,54 +45,93 @@
             {{ trick.creator.nickname }}
         </span>
         {% endif %}
-        <span class="badge badge-pill badge-success d-flex flex-column justify-content-center">Date de création : {{ trick.creationDate | date("d/m/Y à H:i:s") }}</span>
+        <span class="badge badge-pill badge-success d-sm-block d-md-flex flex-md-column  justify-content-center">Date de création : {{ trick.creationDate | date("d/m/Y à H:i:s") }}</span>
         {% if trick.modificationDate %}
-            <span class="badge badge-pill badge-success d-flex flex-column justify-content-center">Dernière modification : {{ trick.modificationDate | date("d/m/Y à H:i:s") }}</span>
+            <span class="badge badge-pill badge-success d-sm-block d-md-flex flex-md-column  justify-content-center">Dernière modification : {{ trick.modificationDate | date("d/m/Y à H:i:s") }}</span>
         {% endif %}
     </div>
     <hr>
     <p>{{ trick.description | capitalize }}</p>
     <hr>
-    <div class="row d-flex justify-content-center">
+    <div class="btn btn-info d-block d-md-none showMediaButton">Voir les médias</div>
+    <div class="row d-none d-md-flex justify-content-around mediaDiv">
     {% if trick.images | length > 0 %}
-        {% for image in trick.images %}
-            <div class="mx-3">
-                <a href="{{ asset('uploads/images/' ~ image.name) }}" target="_blank">
-                    <img style="height: 250px; width: 250px;" src="{{ asset('uploads/images/' ~ image.name) }}" alt="...">
-                </a>
-                {% if app.user %}
-                <div class="d-flex justify-content-around">
-                    <a href="{{ path('image_edit', {'id' : image.id}) }}">
-                        <span class="fas fa-pencil-alt text-info"></span>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for image in trick.images %}
+                <li data-target="#carouselExampleIndicators" data-slide-to="{{ loop.index0 }}"
+                    {% if loop.first %}class="active"{% endif %}>
+                </li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for image in trick.images %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <a href="{{ asset('uploads/images/' ~ image.name) }}" target="_blank">
+                        <img style="width: 250px; height: 250px;" src="{{ asset('uploads/images/' ~ image.name) }}" alt="Image illustrant la figure {{ trick.name }}">
                     </a>
-                    <a href="{{ path('image_delete', {'id' : image.id}) }}"
-                       onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette image ?`)">
-                        <span class="far fa-trash-alt text-danger"></span>
-                    </a>
+                    {% if app.user %}
+                        <div class="d-flex justify-content-around">
+                            <a href="{{ path('image_edit', {'id' : image.id}) }}">
+                                <span class="fas fa-pencil-alt text-info"></span>
+                            </a>
+                            <a href="{{ path('image_delete', {'id' : image.id}) }}"
+                               onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette image ?`)">
+                                <span class="far fa-trash-alt text-danger"></span>
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
-                {% endif %}
+                {% endfor %}
             </div>
-        {% endfor %}
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carouselChevron fas fa-chevron-left"></span>
+                <span class="sr-only">Image précédente</span>
+            </a>
+            <a class="carouselControl carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carouselChevron fas fa-chevron-right"></span>
+                <span class="sr-only">Image suivante</span>
+            </a>
+        </div>
     {% else %}
             {% set noImage = 'true' %}
     {% endif %}
     {% if trick.medias | length > 0 %}
-        {% for media in trick.medias %}
-            <div class="mx-3">
-                <iframe width="250" height="250" src="{{ media.url }}" allowfullscreen></iframe>
-                {% if app.user %}
-                    <div class="d-flex justify-content-around">
-                        <a href="{{ path('media_edit', {'id' : media.id}) }}">
-                            <span class="fas fa-pencil-alt text-info"></span>
-                        </a>
-                        <a href="{{ path('media_delete', {'id' : media.id}) }}"
-                           onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette vidéo ?`)">
-                            <span class="far fa-trash-alt text-danger"></span>
-                        </a>
+        <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for media in trick.medias %}
+                    <li data-target="#carouselExampleIndicators2" data-slide-to="{{ loop.index0 }}"
+                        {% if loop.first %}class="active"{% endif %}>
+                    </li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for media in trick.medias %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <iframe width="250" height="250" src="{{ media.url }}" allowfullscreen></iframe>
+                        {% if app.user %}
+                            <div class="d-flex justify-content-around">
+                                <a href="{{ path('media_edit', {'id' : media.id}) }}">
+                                    <span class="fas fa-pencil-alt text-info"></span>
+                                </a>
+                                <a href="{{ path('media_delete', {'id' : media.id}) }}"
+                                   onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette vidéo ?`)">
+                                    <span class="far fa-trash-alt text-danger"></span>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                {% endfor %}
             </div>
-        {% endfor %}
+            <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                <span class="carouselChevron fas fa-chevron-left"></span>
+                <span class="sr-only">Vidéo précédente</span>
+            </a>
+            <a class="carouselControl carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+                <span class="carouselChevron fas fa-chevron-right"></span>
+                <span class="sr-only">Vidéo suivante</span>
+            </a>
+        </div>
     {% else %}
         {% set noVideo = 'true' %}
     {% endif %}
@@ -177,4 +216,14 @@
     {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('.showMediaButton').click(function() {
+            $('.mediaDiv').addClass('d-flex');
+            $(this).removeClass('d-block');
+            $(this).addClass('d-none');
+        });
+    </script>
 {% endblock %}

@@ -5,13 +5,20 @@
 {% block body %}
     <div class="container">
         <h1>Modifier une vidéo de la figure {{ video.trick.name }}</h1>
-        <iframe width="560" height="315" src="{{ video.url }}" allowfullscreen></iframe>
+        <div class="d-flex justify-content-center">
+            <iframe width="560" height="315" src="{{ video.url }}" allowfullscreen></iframe>
+        </div>
         {{ form_start(form) }}
         {{ form_widget(form) }}
 
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-success">
             Modifier la vidéo
         </button>
+        <a  class="btn btn-danger float-right clearfix"
+            href="{{ path('media_delete', {'id' : video.id}) }}"
+            onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette vidéo ?`)">
+            Supprimer la vidéo
+        </a>
 
         {{ form_end(form) }}
     </div>

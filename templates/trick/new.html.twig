@@ -11,7 +11,7 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
 
-    <button type="submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-success">
         Créer la nouvelle figure
     </button>
 
@@ -21,4 +21,5 @@
 
 {% block javascripts %}
     <script src="{{ asset('js/trick.js') }}"></script>
+    <script src="{{ asset('js/uploadField.js') }}"></script>
 {% endblock %}

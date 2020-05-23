@@ -5,14 +5,23 @@
 {% block body %}
     <div class="container">
         <h1>Modifier l'image de couverture de la figure {{ trick.name }}</h1>
-        <img src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="...">
+        <img src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="Image de couverture de la figure {{ trick.name }}">
         {{ form_start(form) }}
         {{ form_widget(form) }}
 
         <button type="submit" class="btn btn-primary">
             Modifier l'image
         </button>
+        <a class="btn btn-danger float-right clearfix"
+           href="{{ path('cover_delete', {'id' : trick.id}) }}"
+           onclick="return confirm(`Êtes-vous sûr de vouloir supprimer l'image de couverture de la figure {{ trick.name }} ?`)">
+            Supprimer l'image de couverture
+        </a>
 
         {{ form_end(form) }}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/uploadField.js') }}"></script>
 {% endblock %}
