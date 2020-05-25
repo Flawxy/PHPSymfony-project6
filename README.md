@@ -1,3 +1,5 @@
+<img src="https://i.ibb.co/N9kdrby/Screenshot-1.png" alt="Screenshot-1" border="0" />
+
 # Développer de A à Z le site communautaire SnowTricks
 ## Un projet OpenClassrooms dans le cadre de ma formation de développeur PHP/Symfony
 

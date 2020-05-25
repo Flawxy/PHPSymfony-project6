@@ -2,38 +2,29 @@
 namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\TwigFilter;
 
 class AppExtension extends AbstractExtension
 {
-    public function getFunctions() : array
+    public function getFilters() : array
     {
         return [
-            new TwigFunction('isMediaAnImage', [$this, 'isMediaAnImage']),
+            new TwigFilter('truncate', [$this, 'truncate']),
         ];
     }
 
     /**
-     * Allows to differentiate images and videos
-     *
-     * @param string $url
-     * @return bool
+     * Custom Twig filter to truncate a string
+     * @param string $text
+     * @param int $length
+     * @param string $append
+     * @return string
      */
-    public function isMediaAnImage(string $url) : bool
+    public function truncate(string $text, int $length, string $append): string
     {
-        if(strpos($url, '.jpg') !== false) {
-            return true;
+        if (strlen($text) > $length) {
+            return mb_substr($text, 0, $length, 'UTF-8') . $append;
         }
-        if(strpos($url, '.jpeg') !== false) {
-            return true;
-        }
-        if(strpos($url, '.png') !== false) {
-            return true;
-        }
-        if(strpos($url, '.gif') !== false) {
-            return true;
-        }
-
-        return false;
+        return $text;
     }
 }

@@ -64,3 +64,7 @@ label[for="comment_content"]
     right: 0;
     z-index: 1000;
 }
+
+#rowLoader, #arrowUp {
+    font-size: 3rem;
+}

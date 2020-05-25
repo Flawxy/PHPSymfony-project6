@@ -14,23 +14,21 @@ class HomeController extends AbstractController
     /**
      * Display the homepage
      *
-     * @Route("/{page<\d+>?1}", name="homepage")
+     * @Route("/", name="homepage")
      * @param TrickRepository $trickRepository
-     * @param PaginationService $paginationService
-     * @param $page
      * @return Response
      */
-    public function home(TrickRepository $trickRepository, PaginationService $paginationService, $page)
+    public function home(TrickRepository $trickRepository)
     {
-        $paginationService
-            ->setEntityClass(Trick::class)
-            ->setPropertyToOrderBy('creationDate')
-            ->setLimit(6)
-            ->setCurrentPage($page);
+        $tricksPerRow = 4;
+        $tricks = $trickRepository->findAll();
+        $numberOfTricks = count($tricks);
+        $numberOfRow = ceil($numberOfTricks / $tricksPerRow);
 
         return $this->render("home.html.twig", [
-            'pagination' => $paginationService,
-            'tricks' => $trickRepository->findAll()
+            'tricks' => $tricks,
+            'totalTricks' => $numberOfTricks,
+            'numberOfRow' => $numberOfRow
             ]
         );
     }
