@@ -26,6 +26,7 @@
                         <a href="{{ path('tricks_show', {'slug': tricks[j].slug}) }}">
                             <img style="height: 150px; width: 100%;" src="{{ asset('uploads/images/' ~ tricks[j].coverImage) }}" alt="Image de couverture de la figure {{ tricks[j].name }}">
                         </a>
+                        {% if app.user %}
                         <div class="card-body pt-1 mt-1 d-flex justify-content-around">
                             <a href="{{ path('tricks_edit', {'slug' : tricks[j].slug}) }}">
                                 <span class="fas fa-pencil-alt text-info"></span>
@@ -35,6 +36,7 @@
                                 <span class="far fa-trash-alt text-danger"></span>
                             </a>
                         </div>
+                        {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}
