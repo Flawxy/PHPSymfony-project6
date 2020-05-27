@@ -138,7 +138,9 @@
         {% set noVideo = 'true' %}
     {% endif %}
     {% if noImage is defined and noVideo is defined %}
-        Aucune vidéo ou image d'illustration actuellement.
+        <div class="container">
+            Aucune vidéo ou image d'illustration actuellement.
+        </div>
     {% endif %}
     </div>
     <hr>
