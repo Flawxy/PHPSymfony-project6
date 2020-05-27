@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'une image{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <h1>Modifier une image de la figure {{ image.trick.name }}</h1>
+        <div class="d-flex justify-content-center">
+            <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="Image de présentation de la figure {{ image.trick.name }}">
+        </div>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-success">
+            Modifier l'image
+        </button>
+        <a  class="btn btn-danger"
+            href="{{ path('image_delete', {'id' : image.id}) }}"
+            onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette image ?`)">
+            Supprimer l'image
+        </a>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/uploadField.js') }}"></script>
+{% endblock %}

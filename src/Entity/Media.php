@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MediaRepository")
@@ -18,13 +19,12 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Regex(
+     *     pattern="/embed/",
+     *     message="Le lien d'intégration doit être de type embed"
+     * )
      */
-    private string $url;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $caption;
+    private ?string $url = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="medias")
@@ -49,24 +49,12 @@ class Media
         return $this;
     }
 
-    public function getCaption(): ?string
-    {
-        return $this->caption;
-    }
-
-    public function setCaption(string $caption): self
-    {
-        $this->caption = $caption;
-
-        return $this;
-    }
-
     public function getTrick(): ?Trick
     {
         return $this->trick;
     }
 
-    public function setTrick(?Trick $trick): self
+    public function setTrick(Trick $trick): self
     {
         $this->trick = $trick;
 

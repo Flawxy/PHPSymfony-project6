@@ -1,20 +1,233 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ trick.name | capitalize }}{% endblock %}
+{% block title %}Figure : {{ trick.name | capitalize }}{% endblock %}
 
 {% block body %}
 <div class="container">
-    <h1>{{ trick.category.name | capitalize }} : {{ trick.name }}</h1>
-    <p>{{ trick.description | capitalize }}</p>
-    {% for media in trick.medias %}
-        {% if isMediaAnImage(media.url) %}
-            <img src="{{ media.url }}" alt="..." />
-        {% else %}
-        {{ media.url | raw }}
+    <div class="row mt-3 d-flex justify-content-center">
+        <h1>
+            Figure : {{ trick.name | capitalize }}
+        </h1>
+        {% if app.user %}
+            <div class="ml-1">
+                <a href="{{ path('tricks_edit', {'slug' : trick.slug}) }}">
+                    <span class="fas fa-pencil-alt text-info"></span>
+                </a>
+                <a href="{{ path('tricks_delete', {'slug' : trick.slug}) }}"
+                   onclick="return confirm(`Êtes-vous sûr de vouloir supprimer la figure {{ trick.name }} ?`)">
+                    <span class="far fa-trash-alt text-danger"></span>
+                </a>
+            </div>
         {% endif %}
-    {% endfor %}
+    </div>
+
+    <div class="mb-3">
+        {% if app.user %}
+            <div class="float-right">
+                <a href="{{ path('cover_edit', {'id' : trick.id}) }}">
+                    <span class="fas fa-pencil-alt text-info"></span>
+                </a>
+                <a href="{{ path('cover_delete', {'id' : trick.id}) }}"
+                   onclick="return confirm(`Êtes-vous sûr de vouloir supprimer l'image de couverture de la figure {{ trick.name }} ?`)">
+                    <span class="far fa-trash-alt text-danger"></span>
+                </a>
+            </div>
+        {% endif %}
+        <a href="{{ asset('uploads/images/' ~ trick.coverImage) }}" target="_blank">
+            <img style="max-height: 40rem; width: 100%;" src="{{ asset('uploads/images/' ~ trick.coverImage) }}" alt="Image de couverture de la figure {{ trick.name }}">
+        </a>
+    </div>
+
+    <div class="d-sm-block d-md-flex justify-content-md-around">
+        <span class="badge badge-pill badge-info d-sm-block d-md-flex flex-md-column justify-content-center">Catégorie : {{ trick.category.name | capitalize }}</span>
+        {% if trick.creator %}
+        <span class="badge badge-pill badge-primary">
+            Créateur :
+            <img src="{{ trick.creator.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ trick.creator.nickname }}">
+            {{ trick.creator.nickname }}
+        </span>
+        {% endif %}
+        <span class="badge badge-pill badge-success d-sm-block d-md-flex flex-md-column  justify-content-center">Date de création : {{ trick.creationDate | date("d/m/Y à H:i:s") }}</span>
+        {% if trick.modificationDate %}
+            <span class="badge badge-pill badge-success d-sm-block d-md-flex flex-md-column  justify-content-center">Dernière modification : {{ trick.modificationDate | date("d/m/Y à H:i:s") }}</span>
+        {% endif %}
+    </div>
+    <hr>
+    <p>{{ trick.description | capitalize }}</p>
+    <hr>
+    <div class="btn btn-info d-block d-md-none showMediaButton">Voir les médias</div>
+    <div class="row d-none d-md-flex justify-content-around mediaDiv">
+    {% if trick.images | length > 0 %}
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for image in trick.images %}
+                <li data-target="#carouselExampleIndicators" data-slide-to="{{ loop.index0 }}"
+                    {% if loop.first %}class="active"{% endif %}>
+                </li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for image in trick.images %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <a href="{{ asset('uploads/images/' ~ image.name) }}" target="_blank">
+                        <img style="width: 250px; height: 250px;" src="{{ asset('uploads/images/' ~ image.name) }}" alt="Image illustrant la figure {{ trick.name }}">
+                    </a>
+                    {% if app.user %}
+                        <div class="d-flex justify-content-around">
+                            <a href="{{ path('image_edit', {'id' : image.id}) }}">
+                                <span class="fas fa-pencil-alt text-info"></span>
+                            </a>
+                            <a href="{{ path('image_delete', {'id' : image.id}) }}"
+                               onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette image ?`)">
+                                <span class="far fa-trash-alt text-danger"></span>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carouselChevron fas fa-chevron-left"></span>
+                <span class="sr-only">Image précédente</span>
+            </a>
+            <a class="carouselControl carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carouselChevron fas fa-chevron-right"></span>
+                <span class="sr-only">Image suivante</span>
+            </a>
+        </div>
+    {% else %}
+            {% set noImage = 'true' %}
+    {% endif %}
+    {% if trick.medias | length > 0 %}
+        <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for media in trick.medias %}
+                    <li data-target="#carouselExampleIndicators2" data-slide-to="{{ loop.index0 }}"
+                        {% if loop.first %}class="active"{% endif %}>
+                    </li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for media in trick.medias %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <iframe width="250" height="250" src="{{ media.url }}" allowfullscreen></iframe>
+                        {% if app.user %}
+                            <div class="d-flex justify-content-around">
+                                <a href="{{ path('media_edit', {'id' : media.id}) }}">
+                                    <span class="fas fa-pencil-alt text-info"></span>
+                                </a>
+                                <a href="{{ path('media_delete', {'id' : media.id}) }}"
+                                   onclick="return confirm(`Êtes-vous sûr de vouloir supprimer cette vidéo ?`)">
+                                    <span class="far fa-trash-alt text-danger"></span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                <span class="carouselChevron fas fa-chevron-left"></span>
+                <span class="sr-only">Vidéo précédente</span>
+            </a>
+            <a class="carouselControl carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+                <span class="carouselChevron fas fa-chevron-right"></span>
+                <span class="sr-only">Vidéo suivante</span>
+            </a>
+        </div>
+    {% else %}
+        {% set noVideo = 'true' %}
+    {% endif %}
+    {% if noImage is defined and noVideo is defined %}
+        <div class="container">
+            Aucune vidéo ou image d'illustration actuellement.
+        </div>
+    {% endif %}
+    </div>
+    <hr>
+    <div class="mt-3">
+        {% if app.user %}
+            {{ form_start(form) }}
+            {{ form_errors((form.content)) }}
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-primary">
+                Poster votre commentaire
+            </button>
+            <div class="text-muted">(connecté(e) en tant que <strong>{{ app.user.nickname }}</strong>)</div>
+            {{ form_end(form) }}
+        {% else %}
+        Pour écrire un commentaire, il faut vous <a href="{{ path('account_login') }}">identifier</a> ou vous
+        <a href="{{ path('account_register') }}">inscrire</a> si vous ne possédez pas encore de compte !
+        {% endif %}
+    </div>
+    <hr>
+    <div class="mt-3">
+    {% if trick.comments | length > 0 %}
+        <span class="d-flex justify-content-center mb-2">
+            Il y a actuellement {{ trick.comments | length }} commentaire{% if trick.comments | length > 1%}s{% endif%} concernant cette figure !
+        </span>
+        <div class="d-flex justify-content-center">
+            {% set page = pagination.currentPage %}
+            {% set pages = pagination.pages %}
+            <ul class="pagination pagination-sm">
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('tricks_show', {'slug': trick.slug, 'page': page - 1}) }}">&laquo;</a>
+                </li>
+                {% for i in 1..pages %}
+                <li class="page-item {% if i == page %}active{% endif %}">
+                    <a class="page-link" href="{{ path('tricks_show', {'slug': trick.slug, 'page': i}) }}">{{ i }}</a>
+                </li>
+                {% endfor %}
+                <li class="page-item {% if page == pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ path('tricks_show', {'slug': trick.slug, 'page': page + 1}) }}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+        {% for comment in pagination.data %}
+            {% if comment.author.nickname == trick.creator.nickname %}
+                {% set authorIsCreator = 'true' %}
+            {% else %}
+                {% set authorIsCreator = 'false' %}
+            {% endif %}
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">
+                    Posté le {{ comment.date | date('d/m/Y à H:i:s') }}
+                    {% if authorIsCreator == 'true' %}
+                        <span class="authorIsCreator">
+                            (créateur de la figure)
+                        </span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        {% if comment.author %}
+                            <img src="{{ comment.author.profilePicture }}" class="avatar avatar-medium" alt="Avatar de {{ comment.author.nickname }}">
+                            <span {% if authorIsCreator == 'true' %}class="authorIsCreator"{% endif %}>
+                                {{ comment.author.nickname }}
+                            </span>
+                        {% else %}
+                            Pseudo supprimé
+                        {% endif %}
+                    </h4>
+                    <p class="card-text {% if authorIsCreator == 'true' %}authorIsCreator{% endif %}">
+                        {{ comment.content }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        Il n'y a actuellement aucun commentaire sur cette figure.
+    {% endif %}
+    </div>
 </div>
 {% endblock %}
 
-
-
+{% block javascripts %}
+    <script>
+        $('.showMediaButton').click(function() {
+            $('.mediaDiv').addClass('d-flex');
+            $(this).removeClass('d-block');
+            $(this).addClass('d-none');
+        });
+    </script>
+{% endblock %}

@@ -3,13 +3,20 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("name",
+ *     message="Une figure portant ce nom existe déjà !"
+ * )
  */
 class Trick
 {
@@ -22,8 +29,12 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *     normalizer="trim",
+     *     message="Vous devez préciser le nom de la figure !"
+     * )
      */
-    private string $name;
+    private ?string $name = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -32,43 +43,64 @@ class Trick
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(
+     *     normalizer="trim",
+     *     message="Vous devez écrire une description !"
+     * )
+     * @Assert\Length(
+     *     min="20",
+     *     minMessage="La description doit faire au moins 20 caractères !"
+     * )
      */
-    private string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick", orphanRemoval=true)
+     * @Assert\Valid()
      */
     private Collection $medias;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks")
      */
-    private Category $category;
+    private ?Category $category = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
      */
-    private User $creator;
+    private ?User $creator = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
+     * @Assert\Valid()
      */
     private Collection $comments;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private \DateTime $creationDate;
+    private DateTimeInterface $creationDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?\DateTime $modificationDate;
+    private ?DateTimeInterface $modificationDate;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $coverImage = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true)
+     */
+    private Collection $images;
 
     public function __construct()
     {
         $this->medias = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -90,7 +122,7 @@ class Trick
      */
     public function initializeDate()
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = new DateTime();
     }
 
     /**
@@ -100,7 +132,7 @@ class Trick
      */
     public function updateDate()
     {
-        $this->modificationDate = new \DateTime();
+        $this->modificationDate = new DateTime();
     }
 
     public function getId(): ?int
@@ -230,26 +262,69 @@ class Trick
         return $this;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
+    public function getCreationDate(): ?DateTimeInterface
     {
         return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $creationDate): self
+    public function setCreationDate(DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
 
         return $this;
     }
 
-    public function getModificationDate(): ?\DateTimeInterface
+    public function getModificationDate(): ?DateTimeInterface
     {
         return $this->modificationDate;
     }
 
-    public function setModificationDate(?\DateTimeInterface $modificationDate): self
+    public function setModificationDate(?DateTimeInterface $modificationDate): self
     {
         $this->modificationDate = $modificationDate;
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(string $coverImage): self
+    {
+        $this->coverImage = $coverImage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
+            }
+        }
 
         return $this;
     }

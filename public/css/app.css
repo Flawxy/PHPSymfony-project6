@@ -1,0 +1,70 @@
+body {
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 200px;
+}
+
+footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.homepageHeader {
+    position: relative;
+    height: 100vh;
+    background-image: url("/images/headerCover.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.headerArrow span {
+    font-size: 5rem;
+    color: black;
+    position: absolute;
+    bottom: 10rem;
+    right: 8rem;
+}
+
+.avatar {
+    max-width: 128px;
+    max-height: 128px;
+    border-radius: 50%;
+}
+
+.avatar-medium {
+    max-width: 64px;
+    max-height: 64px;
+}
+
+.avatar-mini {
+    max-width: 24px;
+    max-height: 24px;
+}
+
+label[for="comment_content"]
+{
+    display: none;
+}
+
+.carouselChevron {
+    font-size: 2em;
+    color: black;
+}
+
+.authorIsCreator {
+    color: gold;
+    font-weight: bold;
+}
+
+.alertContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+#rowLoader, #arrowUp {
+    font-size: 3rem;
+}

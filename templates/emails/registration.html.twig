@@ -1,0 +1,11 @@
+<h3>Vous vous êtes enregistré sur SnowTricks !</h3>
+
+<p>Bonjour {{ user.nickname }}! Merci pour votre inscription sur SnowTricks !</p>
+
+<p>Afin de finaliser votre enregistrement, merci de cliquer sur
+    <a href="{{ url('account_validation', { 'confirmationToken' : user.confirmationToken }) }}">
+        ce lien !
+    </a>
+</p>
+
+À tout de suite !

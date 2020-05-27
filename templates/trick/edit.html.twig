@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'une figure{% endblock %}
+
+{% form_theme form 'trick/_collection.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Modifier une figure</h1>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-success">
+            Modifier la figure
+        </button>
+        <a  class="btn btn-danger float-right clearfix"
+            href="{{ path('tricks_delete', {'slug' : trick.slug}) }}"
+            onclick="return confirm(`Êtes-vous sûr de vouloir supprimer la figure {{ trick.name }} ?`)">
+            Supprimer la figure
+        </a>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/trick.js') }}"></script>
+    <script src="{{ asset('js/uploadField.js') }}"></script>
+{% endblock %}
