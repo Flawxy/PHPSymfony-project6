@@ -1,0 +1,15 @@
+{
+  "name": "Snowtricks",
+  "short_name": "Snowtricks",
+  "lang": "fr-FR",
+  "start_url": "/",
+  "display": "browser",
+  "theme_color": "#37a7e8",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "256x119",
+      "type": "ico"
+    }
+  ]
+}

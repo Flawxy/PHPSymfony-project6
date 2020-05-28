@@ -7,16 +7,12 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
-use App\Repository\CommentRepository;
-use App\Repository\TrickRepository;
 use App\Service\FileUploaderService;
 use App\Service\ImageManagementService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,12 +110,11 @@ class TrickController extends AbstractController
      * @param Trick $trick
      * @param Request $request
      * @param EntityManagerInterface $manager
-     * @param CommentRepository $commentRepository
      * @param PaginationService $paginationService
      * @param int $page
      * @return Response
      */
-    public function show(Trick $trick, Request $request, EntityManagerInterface $manager, CommentRepository $commentRepository, PaginationService $paginationService, $page)
+    public function show(Trick $trick, Request $request, EntityManagerInterface $manager, PaginationService $paginationService, $page)
     {
         $paginationService
             ->setEntityClass(Comment::class)

@@ -4,6 +4,20 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>SnowTricks - {% block title %}Bienvenue !{% endblock %}</title>
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="application-name" content="Snowtricks">
+        <meta name="apple-mobile-web-app-title" content="Snowtricks">
+        <meta name="theme-color" content="#37a7e8">
+        <meta name="msapplication-navbutton-color" content="#37a7e8">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="msapplication-starturl" content="/">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="icon" type="ico" sizes="256x119" href="{{ asset('favicon.ico') }}">
+        <link rel="apple-touch-icon" type="ico" sizes="256x119" href="{{ asset('favicon.ico') }}">
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         {% block stylesheets %}{% endblock %}
