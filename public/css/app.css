@@ -68,3 +68,9 @@ label[for="comment_content"]
 #rowLoader, #arrowUp {
     font-size: 3rem;
 }
+
+.coverImageCard {
+    object-fit: cover;
+    height: 150px;
+    width: 100%;
+}
