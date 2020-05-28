@@ -12,6 +12,12 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class MailManagerService extends AbstractController
 {
+    private EntityManagerInterface $manager;
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
 
     /**
      * @param User $user
@@ -37,10 +43,9 @@ class MailManagerService extends AbstractController
      * @param string $mail
      * @param MailerInterface $mailer
      * @param UserRepository $userRepository
-     * @param EntityManagerInterface $manager
      * @throws TransportExceptionInterface
      */
-    public function sendPasswordResetMail(string $mail, MailerInterface $mailer, UserRepository $userRepository, EntityManagerInterface $manager)
+    public function sendPasswordResetMail(string $mail, MailerInterface $mailer, UserRepository $userRepository)
     {
         /** @var User $user */
         $user = $userRepository->findOneByMail($mail);
@@ -48,8 +53,8 @@ class MailManagerService extends AbstractController
 
             $user->createResetPasswordToken();
 
-            $manager->persist($user);
-            $manager->flush();
+            $this->manager->persist($user);
+            $this->manager->flush();
 
             $email = (new TemplatedEmail())
                 ->from('flawxy.snowtricks@gmail.com')
