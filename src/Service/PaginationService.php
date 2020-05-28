@@ -45,7 +45,7 @@ class PaginationService
         $repo = $this->manager->getRepository($this->entityClass);
 
         // Returns the sorted data
-        if ($this->propertyName !== null AND $this->propertyValue !== NULL) {
+        if ($this->propertyName !== null && $this->propertyValue !== NULL) {
             return $repo->findBy([$this->propertyName => $this->propertyValue], [$this->propertyToOrderBy => $this->orderBy], $this->limit, $offset);
         }
         return $repo->findBy([], [$this->propertyToOrderBy => $this->orderBy], $this->limit, $offset);

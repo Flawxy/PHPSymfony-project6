@@ -1,0 +1,1 @@
+Sitemap: http://symfony-project6-flawxy.herokuapp.com/sitemap.xml

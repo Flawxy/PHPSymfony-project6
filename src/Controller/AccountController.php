@@ -170,21 +170,20 @@ class AccountController extends AbstractController
      *
      * @Route("/account/reset-password", name="account_reset_password")
      * @param Request $request
-     * @param EntityManagerInterface $manager
      * @param MailManagerService $mailManagerService
      * @param MailerInterface $mailer
      * @param UserRepository $userRepository
      * @return Response
      * @throws TransportExceptionInterface
      */
-    public function resetPassword(Request $request, EntityManagerInterface $manager, MailManagerService $mailManagerService, MailerInterface $mailer, UserRepository $userRepository)
+    public function resetPassword(Request $request, MailManagerService $mailManagerService, MailerInterface $mailer, UserRepository $userRepository)
     {
         $form = $this->createForm(MailType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $mailManagerService->sendPasswordResetMail($form['mail']->getData(), $mailer, $userRepository, $manager);
+            $mailManagerService->sendPasswordResetMail($form['mail']->getData(), $mailer, $userRepository);
 
             $this->addFlash(
                 'success',
