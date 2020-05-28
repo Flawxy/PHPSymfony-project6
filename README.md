@@ -2,7 +2,7 @@
 
 # Développer de A à Z le site communautaire SnowTricks
 ## Un projet OpenClassrooms dans le cadre de ma formation de développeur PHP/Symfony
-
+[![SymfonyInsight](https://insight.symfony.com/projects/69b24f9b-30fb-46f5-b28b-69f4935fb60a/big.svg)](https://insight.symfony.com/projects/69b24f9b-30fb-46f5-b28b-69f4935fb60a)
 ### Instructions d'installation :
 
 - Créer le dossier qui accueillera le projet.
