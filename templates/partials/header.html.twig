@@ -7,54 +7,6 @@
         </div>
     </div>
 {% endfor %}
-
-<nav id="topBar" class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="{{ path('homepage') }}">SnowTricks</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarColor01">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('homepage') }}">Accueil<span class="sr-only">(current)</span></a>
-            </li>
-            {% if app.user %}
-                <li class="nav-item">
-                    <a href="{{ path('tricks_create') }}" class="nav-link">Créer une figure</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('account_register') }}">Inscription</a>
-                </li>
-                <li class="nav-item d-none d-md-block">
-                    <a class="nav-link" href="{{ path('account_login') }}">Connexion</a>
-                </li>
-                <li class="nav-item d-block d-md-none">
-                    <a class="nav-link" href="{{ path('account_login') }}"><span class="fas fa-sign-in-alt"></span></a>
-                </li>
-            {% endif %}
-        </ul>
-        {% if app.user %}
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="{{ path('account_update_password') }}" class="nav-link">Changer de mot de passe</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav d-flex flex-column align-items-center">
-            <li class="nav-item my-2 my-lg-0 text-secondary">
-                <span class="badge badge-pill badge-primary">
-                    <img src="{{ app.user.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ app.user.profilePicture }}">
-                    {{ app.user.nickname }}
-                </span>
-            </li>
-            <li class="nav-item d-none d-md-block">
-                <a href="{{ path('account_logout') }}" class="nav-link">Déconnexion</a>
-            </li>
-            <li class="nav-item d-block d-md-none">
-                <a href="{{ path('account_logout') }}" class="nav-link"><span class="fas fa-sign-out-alt"></span></a>
-            </li>
-        </ul>
-        {% endif %}
-    </div>
-</nav>
+<div id="topBar"></div>
+{% include 'partials/navBar.html.twig' %}
+{% include 'partials/navBarMobile.html.twig' %}
