@@ -11,7 +11,8 @@
                 <h1>Connectez vous !</h1>
                 {% if hasError %}
                     <div class="alert alert-danger">
-                        Nom d'utilisateur ou mot de passe invalide.
+                        Nom d'utilisateur ou mot de passe invalide.<br />
+                        Peut-être n'avez vous pas encore activé votre compte ?
                     </div>
                 {% endif %}
                 <form action="{{ path('account_login') }}" method="post">
