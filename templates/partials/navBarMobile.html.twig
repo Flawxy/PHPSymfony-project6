@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand fixed-bottom d-md-none navbar-dark bg-primary">
+    <div class="collapse navbar-collapse d-flex justify-content-center">
+        <ul style="width: 100%;" class="navbar-nav d-flex justify-content-around">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('homepage') }}">
+                    <span class="fas fa-home"></span>
+                </a>
+            </li>
+            {% if app.user %}
+                <li class="nav-item">
+                    <a href="{{ path('tricks_create') }}" class="nav-link">
+                        <span class="fas fa-plus-square"></span>
+                    </a>
+                </li>
+                <li class="nav-item text-secondary">
+                <span class="badge badge-pill badge-primary">
+                    <img src="{{ app.user.profilePicture }}" class="avatar avatar-mini" alt="Avatar de {{ app.user.profilePicture }}">
+                    {{ app.user.nickname }}
+                </span>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('account_update_password') }}" class="nav-link">
+                        <span class="fas fa-key"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('account_logout') }}" class="nav-link">
+                        <span class="fas fa-sign-out-alt"></span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('account_register') }}">
+                        <span class="fas fa-user-plus"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('account_login') }}">
+                        <span class="fas fa-sign-in-alt"></span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
