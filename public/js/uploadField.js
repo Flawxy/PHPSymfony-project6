@@ -2,6 +2,6 @@ $(document).ready(() => {
     bsCustomFileInput.init()
 })
 
-setInterval(() => {
+$('#add-image').click(() => {
     bsCustomFileInput.init()
-    }, 1000);
+})
